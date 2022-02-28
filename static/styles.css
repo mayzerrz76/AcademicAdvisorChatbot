@@ -1,10 +1,10 @@
 body {
     font-family: Garamond;
-    background-color:black;
+    background-color:orange;
 }
 
 h1 {
-    color: black;
+    color: navy;
     margin-bottom: 0;
     margin-top: 0;
     text-align: center;
@@ -70,7 +70,7 @@ h3 {
 }
 
 .botText span {
-    background-color: #EF5350;
+    background-color: navy;
     padding: 10px;
     border-radius: 2px;
 }
