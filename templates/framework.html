@@ -1,16 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <!link rel = "stylesheet" type = "text/css" href = "./static/newstyles.css">
-    <!script src= PUT URL HERE><! /script>
+    <link rel = "stylesheet" type = "text/css" href = "./static/newstyles.css">
+    <! MAKES THE TEXT ENTRY WORK >
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
     <title>Academic Advisor Chatbot</title>
 </head>
 <body>
 
-<!script>
+<h1>Academic Advisor Chatbot</h1>
 
-<!/script>
+
+<div>
+<div id="chatbox">
+    <p class="botText"><span>User Text Goes Here</span></p>
+</div>
+
+<div id="userInput">
+    <input id="textInput" type="text" name="msg" placeholder="Message">
+
+
+</div>
+
+<script>
+function getUserText() {
+    var rawText = $("#textInput").val();
+    var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+    $("#textInput").val("");
+    $("#chatbox").append(userHtml);
+    document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+
+    $.get("/get", { msg : rawText } ).done(function(data) {
+        var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+        $("#chatbox").append(botHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+    });
+
+    }
+
+$("#textInput").keypress(function(e) {
+    if (e.which === 13) {
+        getUserText();
+    }
+
+});
+
+
+</script>
+
+
+</div>
 
 </body>
 </html>
