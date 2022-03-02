@@ -1,10 +1,10 @@
 body {
-    font-family: Garamond;
-    background-color:orange;
+    font-family: Cambria;
+    background-color:black;
 }
 
 h1 {
-    color: navy;
+    color: white;
     margin-bottom: 0;
     margin-top: 0;
     text-align: center;
@@ -12,7 +12,7 @@ h1 {
 }
 
 h3 {
-    color: black;
+    color: white;
     font-size: 20px;
     margin-top: 3px;
     text-align: center;
