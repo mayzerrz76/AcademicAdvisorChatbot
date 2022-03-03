@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< Updated upstream:templates/framework.html
     <link rel = "stylesheet" type = "text/css" href = "./static/framestyle.css">
     <! MAKES THE TEXT ENTRY WORK >
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -12,6 +13,13 @@
 <h1>Academic Advisor Chatbot</h1>
 
 
+=======
+    <link rel = "stylesheet" type="text/css" href="./static/styles.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <h1>Class Advisor Chat Bot</h1>
+>>>>>>> Stashed changes:templates/index.html
 <div>
     <div id="chatbox">
     </div>
@@ -22,6 +30,7 @@
 
 
 
+<<<<<<< Updated upstream:templates/framework.html
     <script>
     function getUserText() {
         var rawText = $("#textInput").val();
@@ -42,6 +51,27 @@
         if (e.which === 13) {
             getUserText();
         }
+=======
+<script>
+function getBotResponse() {
+    var rawText = $("#textInput").val();
+    var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
+    $("#textInput").val("");
+    $("#chatbox").append(userHtml);
+    document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+    $.get("/get", { msg : rawText } ).done(function(data) {
+        var botHtml = '<p class="botText"><span>' + data + '</span></p>';
+        $("#chatbox").append(botHtml);
+        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
+    });}
+
+$("#textInput").keypress(function(e) {
+    if (e.which === 13) {
+        getBotResponse();
+    }
+
+});
+>>>>>>> Stashed changes:templates/index.html
 
     });
 
