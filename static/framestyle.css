@@ -18,6 +18,12 @@ h3 {
     text-align: center;
 }
 
+p {
+    color: white;
+    font-size 10px;
+    text-align: center;
+}
+
 #chatbox {
     background-color: black;
     margin-left: auto;
