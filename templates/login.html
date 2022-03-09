@@ -11,6 +11,7 @@
 
 <h1> LOGIN </h1>
 
+    <div class ="login">
     <input type="text" id="userName">
     <input type="password" id="userPswd">
     <button onclick="checkPassword()"> Enter </button>
@@ -21,8 +22,10 @@
     function checkPassword() {
         var x = document.getElementById("userName").value;
         var y = document.getElementById("userPswd").value;
-        if ((x == "UserName") && (y == "password")) {
-            document.getElementById("demo").innerHTML = "Successful Login";
+        // replace check with any pair from database
+        if ((x == "u") && (y == "p")) {
+            // replace google url with chatbot framework
+            window.location.href = "https://www.google.com";
         }
         else {
             document.getElementById("demo").innerHTML = "incorrect username or password";
@@ -31,6 +34,7 @@
 
 
     </script>
+    </div>
 
 </body>
 </html>

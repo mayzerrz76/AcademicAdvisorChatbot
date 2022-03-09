@@ -5,7 +5,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("framework.html")
+    return render_template("login.html")
 
 @app.route("/get")
 def echo_user_response():
@@ -13,4 +13,4 @@ def echo_user_response():
     return str(userText) + " echo"
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0', port=3000)
