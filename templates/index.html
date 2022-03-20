@@ -3,13 +3,14 @@
 <head>
     <link rel = "stylesheet" type = "text/css" href = "./static/style.css">
     <! MAKES THE TEXT ENTRY WORK >
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <meta charset="UTF-8">
-    <title>Academic Advisor Chatbot</title>
+    <title>SU Academic Advisor Bot</title>
 </head>
 <body>
 
-<h1>Academic Advisor Chatbot</h1>
+<h1>SU Advisor Bot</h1>
 
 <div>
     <div id="chatbox">
@@ -19,31 +20,8 @@
         <input id="textInput" type="text" name="msg" placeholder="Message">
     </div>
 
+    <script src="../static/index.js"></script>
 
-    <script>
-    function getUserText() {
-        var rawText = $("#textInput").val();
-        var userHtml = '<p class="userText"><span>' + rawText + '</span></p>';
-        $("#textInput").val("");
-        $("#chatbox").append(userHtml);
-        document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-
-        $.get("/get", { msg : rawText } ).done(function(data) {
-            var botHtml = '<p class="botText"><span>' + data + '</span></p>';
-            $("#chatbox").append(botHtml);
-            document.getElementById('userInput').scrollIntoView({block: 'start', behavior: 'smooth'});
-        });
-
-    }
-
-    $("#textInput").keypress(function(e) {
-        if (e.which === 13) {
-            getUserText();
-    }
-    });
-
-
-    </script>
 
 </div>
 </body>
