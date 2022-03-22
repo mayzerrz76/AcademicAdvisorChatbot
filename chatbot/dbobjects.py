@@ -18,14 +18,19 @@ class UserAccount:
                 raise KeyError('A user with that username already exists')
 
         self.username = username
+
+        # For validating password requirements - e.g. at least 8 characters, number, upper + lower case
+        # Currently unused
         if not self.is_valid_password(password):
             raise ValueError('Password does not meet requirements')
         self.password = password
+
         self.courses_taken = courses_taken
         self.degree_programs = degree_programs
         self.planner = planner
         self.courses_registered = courses_registered
 
+        # These are like this because Python doesn't like mutable default values for arguments
         if self.courses_taken is None:
             self.courses_taken = []
         if self.degree_programs is None:
@@ -35,6 +40,7 @@ class UserAccount:
         if self.courses_registered is None:
             self.courses_registered = []
 
+        # Add the entry to the database
         self.update_database()
 
     def update_database(self):
@@ -67,7 +73,7 @@ class Course:
     COURSES = DATABASE['courses']
 
     def __init__(self, course_id: str, course_num: str, subject_code: str, section: str, location: str, instructor: str,
-                 days: str, times: str, description: str, prereqs=None, coreqs=None, from_mongo=False, _id=None):
+                 days: str, times: str, semester: str, description: str, prereqs=None, coreqs=None, from_mongo=False, _id=None):
 
         # If this is a new database entry, validate the username
         if not from_mongo:
@@ -83,6 +89,7 @@ class Course:
         self.instructor = instructor
         self.days = days
         self.times = times
+        self.semester = semester
         self.description = description
         self.prereqs = prereqs
         self.coreqs = coreqs
