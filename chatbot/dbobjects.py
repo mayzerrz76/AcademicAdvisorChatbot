@@ -5,7 +5,6 @@ import certifi
 CONNECTION_STRING = "mongodb+srv://chatSyr:mongoChat%40300@cluster0.4mduz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 DATABASE = pymongo.MongoClient(CONNECTION_STRING, tlsCAFile=certifi.where())['chatbot']
 
-
 class UserAccount:
     USERS = DATABASE['users']
 
