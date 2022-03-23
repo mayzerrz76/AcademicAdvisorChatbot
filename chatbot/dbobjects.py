@@ -1,9 +1,9 @@
 import json
 import pymongo
+import certifi
 
 CONNECTION_STRING = "mongodb+srv://chatSyr:mongoChat%40300@cluster0.4mduz.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-    #'mongodb+srv://chatSyr:mongoChat%40300@cluster0.4mduz.mongodb.net/test?authSource=admin&replicaSet=atlas-3m5p4x-shard-0&readPreference=primary&appname=MongoDB%20Compass&ssl=true'
-DATABASE = pymongo.MongoClient(CONNECTION_STRING)['chatbot']
+DATABASE = pymongo.MongoClient(CONNECTION_STRING, tlsCAFile=certifi.where())['chatbot']
 
 
 class UserAccount:

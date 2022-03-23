@@ -1,4 +1,3 @@
-import json
 import chatbot.dbobjects as db
 from flask import Flask, render_template, request
 
@@ -7,7 +6,6 @@ app = Flask(__name__)
 @app.route("/")
 def home():
     return render_template("login.html")
-
 
 @app.route("/test")
 def echo_user_response():
@@ -27,8 +25,6 @@ def validate_login():
         return "correct login!"
     else:
         return "incorrect username and password"
-
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
