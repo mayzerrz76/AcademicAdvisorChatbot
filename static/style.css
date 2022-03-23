@@ -19,17 +19,25 @@ h3 {
 }
 
 p {
-    color: white;
+    color: black;
     font-size 10px;
     text-align: center;
 }
+#content {
+  position: relative;
+  height: 0px;
+  width: 50%;
+  background-color: black;
+}
 
 #chatbox {
+    height: 400px;
+    overflow: scroll;
     background-color: black;
     margin-left: auto;
     margin-right: auto;
-    width: 40%;
-    margin-top: 60px;
+    width: 50%;
+    margin-top: 20px;
 }
 
 #userInput{

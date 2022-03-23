@@ -6,8 +6,12 @@ app = Flask(__name__)
 
 @app.route("/")
 def home():
-    return render_template("login.html")
+    # allows for interacting with login page
+    # return render_template("login.html")
+    # allow for interacting with chatbot page
+    return render_template("index.html")
 
+#NEED APP ROUTES FOR ALL SUB MENUS
 
 @app.route("/test")
 def echo_user_response():
