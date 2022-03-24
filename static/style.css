@@ -31,7 +31,7 @@ p {
 }
 
 #chatbox {
-    height: 400px;
+    height: 500px;
     overflow: scroll;
     background-color: black;
     margin-left: auto;
