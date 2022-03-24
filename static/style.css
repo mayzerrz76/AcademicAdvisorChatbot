@@ -1,15 +1,24 @@
 body {
     font-family: Cambria;
-    background-color:black;
+    background-color:Navy;
 }
 
 h1 {
-    color: white;
+    color: orange;
     margin-bottom: 0;
     margin-top: 0;
     text-align: center;
     font-size: 40px;
 }
+
+h2{
+    color: orange;
+    margin-bottom: 20px;
+    padding-top: 10px;
+    text-align: center;
+    font-size: 28px;
+}
+
 
 h3 {
     color: white;
@@ -17,7 +26,10 @@ h3 {
     margin-top: 3px;
     text-align: center;
 }
-
+#butLogin{
+    margin-top:20px;
+    width: 15%;
+}
 p {
     color: white;
     font-size 10px;
@@ -25,14 +37,38 @@ p {
 }
 #content {
   position: relative;
+
+      overflow: scroll;
+      overflow-x:hidden;
+      overflow-y:scroll;
   height: 0px;
   width: 50%;
   background-color: black;
 }
 
+.loginForms {
+    text-align:center;
+    display: grid;
+    place-items: center;
+    color:orange;
+}
+#passLbl{
+    padding-top: 20px;
+}
+
+#userPswd{
+    width:15%;
+}
+
+#userName{
+    width:15%;
+}
+
 #chatbox {
     height: 500px;
     overflow: scroll;
+    overflow-x:hidden;
+    overflow-y:scroll;
     background-color: black;
     margin-left: auto;
     margin-right: auto;
@@ -55,6 +91,9 @@ p {
     font-size: 17px;
 }
 
+#demo {
+    color: orange;
+}
 #buttonInput {
     padding: 3px;
     font-family: monospace;
