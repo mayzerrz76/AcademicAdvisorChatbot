@@ -11,14 +11,21 @@
 </head>
 <body>
 
-<h1> LOGIN </h1>
+<h1>SU Academic Advisor Bot </h1>
 
-    <div class ="login">
-    <input type="text" id="userName">
-    <input type="password" id="userPswd">
-    <button onclick="checkPassword()"> Enter </button>
+<h2> Please Enter Login: </h2>
 
-    <p id="demo"></p>
+    <div class ="loginPage">
+        <div class="loginForms">
+        <label for="userName">UserName:</label>
+
+    <input type="text" id="userName" minlength="4" maxlength="14">
+        <label for="userPswd" id="passLbl">Password:</label>
+
+    <input type="password" id="userPswd" minlength="6" maxlength="12">
+    <button onclick="checkPassword()" id="butLogin"> Login </button>
+    </div>
+        <p id="demo"></p>
 
         <script src="../static/login.js"></script>
     </div>
