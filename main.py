@@ -37,7 +37,7 @@ def get_course_info():
 def get_program_requirements():
     username = request.args.get('user')
     # heres where the database should be queried for program requirements
-    return "your program requirements are: " + str(username) + "place holder"
+    return "your program requirements are: " + str(username)
 
 @app.route("/login")
 def validate_login():

@@ -4,9 +4,9 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-var menustate = "main";
 
-
+const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6 }
+var menustate = State.MAIN;
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
@@ -26,35 +26,36 @@ function controlFlow() {
         case "0":
             botText = "logout";
             botSays(botText);
-            menustate = "logout";
+            menustate = State.LOGOUT
             break;
         case "1":
-            botText = "list program reqs menu";
-            botSays(botText);
-            menustate = "progreq";
-            progReq();
+            $.get("/prog", {user:"cookie"}, function(aiText){
+                botSays(aiText);
+                botSays("");
+                makeOpening();
+            });
             break;
         case "2":
             botText = "view course pre reqs menu";
             botSays(botText);
-            menustate = "prereq";
+            menustate = State.PREREQ;
             classPre();
             break;
         case "3":
             botText = "build schedule menu";
             botSays(botText);
-            menustate = "sched";
+            menustate = State.SCHED;
             break;
         case "4":
             botText = "view course description menu";
             botSays(botText);
-            menustate = "desc";
+            menustate = State.DESC;
             classDes();
             break;
         case "5":
             botText = "view my profile menu";
             botSays(botText);
-            menustate = "prof";
+            menustate = State.PROF;
             break;
         default:
             botText = "please enter a whole number between 0 and 5";
@@ -67,17 +68,15 @@ function controlFlow() {
 
 }
 
-function getProgReq(){
-    var course = getUserText();
-    userSays(course);
+function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
         botSays(aiText);
     });
     botSays("");
-    mainbool = true;
-    progreqbool = false;
+    menustate = State.MAIN;
     makeOpening();
 }
+
 
 function classPre(){
     botSays("Which course would you like to know about?");
@@ -108,7 +107,7 @@ function getCourse(category) {
     if (course.length <= 7) {
         switch(course){
             case "0":
-                menustate = "main";
+                menustate = State.MAIN;
                 makeOpening();
                 break;
             default:
@@ -146,21 +145,21 @@ function botSays(str) {
 function onEnter(){
     $("#textInput").keypress(function(e) {
     if (e.which === 13) {
-        if (menustate == "main") {
+        if (menustate == State.MAIN) {
             controlFlow();
         }
-        else if (menustate == "prereq"){
+        else if (menustate == State.PREREQ){
             getCourse("prereqs");
-            //botSays("leave loop?")
+
         }
-        else if (menustate == "desc") {
+        else if (menustate == State.DESC) {
             getCourse("description");
         }
-        else if (menustate == "progreq"){
-            getProgReq();
-        }
+        //else if (menustate == State.PROGREQ ){
+           // getProgReq();
+        //}
         else{
-            getUserText();
+            userSays("ahhhh");
         }
 
     }
