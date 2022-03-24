@@ -5,7 +5,7 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 
-const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7 }
+const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7, CHANGEPROF:8 }
 var menustate = State.MAIN;
 var globalCourse = "definitely not null";
 
@@ -58,6 +58,7 @@ function controlFlow() {
             botText = "view my profile menu";
             botSays(botText);
             menustate = State.PROF;
+            viewProf();
             break;
         default:
             botText = "please enter a whole number between 0 and 5";
@@ -68,7 +69,6 @@ function controlFlow() {
     }
 }
 
-
 function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
         botSays(aiText);
@@ -77,6 +77,81 @@ function getProgReq(cookie){
     menustate = State.MAIN;
     makeOpening();
 }
+
+function viewProf(){
+    botSays("Choose a course")
+    botSays("or type 0 to return to main menu")
+}
+
+function editProfile(){
+    var course = getUserText();
+    userSays(course);
+    if ( course.length <= 7 ) {
+        switch(course)
+        {
+            case "0":
+                menustate = State.MAIN;
+                makeOpening();
+                break;
+            default:
+                $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
+                    if (aiText == "bad input") {
+                        botSays("I didn't quite get that--");
+                        viewProf();
+                    }
+                    else {
+                        menustate = State.CHANGEPROF;
+                        botSays(aiText);
+                        globalCourse = course;
+                        chooseAction2();
+                    }
+                });
+                break;
+        }
+    }
+    else {
+    botSays("I didn't quite get that--");
+    viewProf();
+    }
+}
+
+
+function chooseAction2(){
+    botSays("0) choose a different course");
+    botSays("1) add course to schedule");
+    botSays("2) remove course from schedule");
+}
+
+function changeProfile(course){
+   var action = getUserText();
+    userSays(action);
+    switch(action)
+    {
+        case "0":
+            menustate = State.PROF;
+            viewProf();
+            break;
+        case "1":
+            // change this to its own path!
+            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction2();
+            });
+            break;
+        case "2":
+            // change this to its own path! 
+            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction2();
+            });
+            break;
+        default:
+            botSays("I didn't quite get that--");
+            chooseAction2();
+            break;
+    }
+}
+
 
 
 function buildSched(){
@@ -249,7 +324,12 @@ function onEnter(){
         else if (menustate == State.COURSE){
             makeAction(globalCourse);
         }
-
+        else if (menustate == State.PROF){
+            editProfile();
+        }
+        else if (menustate == State.CHANGEPROF){
+            changeProfile(globalCourse);
+        }
         else{
             userSays("ahhhh");
         }
