@@ -109,7 +109,7 @@ p {
 }
 
 .userText span {
-    background-color: #009688;
+    background-color: darkorange;
     padding: 10px;
     border-radius: 2px;
 }
@@ -123,7 +123,7 @@ p {
 }
 
 .botText span {
-    background-color: navy;
+    background-color: blue;
     padding: 10px;
     border-radius: 2px;
 }

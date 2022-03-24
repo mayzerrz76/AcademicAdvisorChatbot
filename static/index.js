@@ -139,7 +139,7 @@ function changeProfile(course){
             });
             break;
         case "2":
-            // change this to its own path! 
+            // change this to its own path!
             $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
                 botSays(aiText);
                 chooseAction2();
