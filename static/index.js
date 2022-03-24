@@ -4,12 +4,7 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-var mainbool = true;
-var progreqbool = false;
-var prereqbool = false;
-var schedbool = false;
-var descbool = false;
-var profbool = false;
+var menustate = "main";
 
 
 
@@ -24,46 +19,42 @@ function makeOpening() {
 makeOpening();
 
 function controlFlow() {
-    var rawText = $("#textInput").val();
-    var botText = "hi";
+    var rawText = getUserText();
     userSays(rawText);
     switch(rawText)
     {
         case "0":
             botText = "logout";
             botSays(botText);
-            mainbool = false;
+            menustate = "logout";
             break;
         case "1":
             botText = "list program reqs menu";
             botSays(botText);
-            mainbool = false;
-            progreqbool = true;
+            menustate = "progreq";
+            progReq();
             break;
         case "2":
             botText = "view course pre reqs menu";
             botSays(botText);
-            mainbool = false;
-            prereqbool = true;
+            menustate = "prereq";
+            classPre();
             break;
         case "3":
             botText = "build schedule menu";
             botSays(botText);
-            mainbool = false;
-            schedbool = false;
+            menustate = "sched";
             break;
         case "4":
-            botText = "view class description menu";
+            botText = "view course description menu";
             botSays(botText);
-            mainbool = false;
-            descbool = true;
+            menustate = "desc";
             classDes();
             break;
         case "5":
             botText = "view my profile menu";
             botSays(botText);
-            mainbool = false;
-            profbool = true;
+            menustate = "prof";
             break;
         default:
             botText = "please enter a whole number between 0 and 5";
@@ -76,6 +67,23 @@ function controlFlow() {
 
 }
 
+function getProgReq(){
+    var course = getUserText();
+    userSays(course);
+    $.get("/prog", {user:cookie}, function(aiText){
+        botSays(aiText);
+    });
+    botSays("");
+    mainbool = true;
+    progreqbool = false;
+    makeOpening();
+}
+
+function classPre(){
+    botSays("Which course would you like to know about?");
+    botSays("or type 0 to return to main menu");
+}
+
 function classDes(){
     botSays("Which course would you like to know about?");
     botSays("or type 0 to return to main menu");
@@ -83,11 +91,7 @@ function classDes(){
 
 function getUserText() {
     // Retrieves the value from the #textinput html object
-    userSays($("#textInput").val());
-    // finds the /test route, passes rawText as parameter msg, executes generic function with output as param
-    $.get("/test", { msg:rawTex, date:"3/22/22" }, function(aiText) {
-            botSays(aiText);
-    });
+    return $("#textInput").val();
 }
 function userSays(str) {
     // Creates an object from the user input with bordering
@@ -98,19 +102,38 @@ function userSays(str) {
     $("#textInput").val("");
 }
 
-function getCourse() {
-    var course = $("#textInput").val();
+function getCourse(category) {
+    var course = getUserText();
     userSays(course);
-    switch(course){
-        case "0":
-            mainbool = true;
-            descbool = false;
-            makeOpening();
-            break;
-        default:
-            botSays("Description of " + course);
-            break;
+    if (course.length <= 7) {
+        switch(course){
+            case "0":
+                menustate = "main";
+                makeOpening();
+                break;
+            default:
+                $.get("/course", { crs:course, type:category}, function(aiText) {
+                    if (aiText == "bad input") {
+                        botSays("I didn't quite get that--")
+                        botSays("Which course would you like to know about?");
+                        botSays("or type 0 to return to main menu");
+                    }
+                    else{
+                        botSays(aiText);
+                        botSays("Would you like to know about another course?");
+                        botSays("or type 0 to return to main menu");
+                    }
+
+                });
+                break;
+        }
     }
+    else {
+        botSays("I didn't quite get that--")
+        botSays("Which course would you like to know about?");
+        botSays("or type 0 to return to main menu");
+    }
+    //botSays("un reachable");
 }
 
 function botSays(str) {
@@ -123,14 +146,22 @@ function botSays(str) {
 function onEnter(){
     $("#textInput").keypress(function(e) {
     if (e.which === 13) {
-        if (mainbool == true) {
+        if (menustate == "main") {
             controlFlow();
         }
-        else if (descbool == true) {
-            getCourse();
+        else if (menustate == "prereq"){
+            getCourse("prereqs");
+            //botSays("leave loop?")
         }
-        else
+        else if (menustate == "desc") {
+            getCourse("description");
+        }
+        else if (menustate == "progreq"){
+            getProgReq();
+        }
+        else{
             getUserText();
+        }
 
     }
 });

@@ -15,9 +15,29 @@ def home():
 @app.route("/test")
 def echo_user_response():
     userText = request.args.get('msg')
-    userDate = request.args.get('date')
     return str(userText) + " echo"
 
+@app.route("/course")
+def get_course_info():
+    course = request.args.get('crs')
+    info = request.args.get('type')
+    # impliment logic flow for which data to get depending on the call from the database
+    # if course dne in mongo return bad input
+    # return "bad input
+    if info == "prereqs":
+        # heres where the mongo response should go
+        return "course prereqs for " + str(course) + " are: "
+    if info == "description":
+        # heres where the mongo response should go
+        return "course description for " + str(course) + " is: "
+    else:
+        return "this shouldn't be accessible!"
+
+@app.route("/prog")
+def get_program_requirements():
+    username = request.args.get('user')
+    # heres where the database should be queried for program requirements
+    return "your program requirements are: " + str(username) + "place holder"
 
 @app.route("/login")
 def validate_login():
