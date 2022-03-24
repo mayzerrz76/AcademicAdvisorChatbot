@@ -1,4 +1,3 @@
-import json
 import chatbot.dbobjects as db
 from flask import Flask, render_template, request
 
@@ -31,7 +30,6 @@ def navigate_main_menu():
         return "view my profile menu"
     else:
         return "please enter a whole number between 0 and 5"
-
 
 @app.route("/test")
 def echo_user_response():
