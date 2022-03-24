@@ -5,8 +5,9 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 
-const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6 }
+const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7 }
 var menustate = State.MAIN;
+var globalCourse = "definitely not null";
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
@@ -26,7 +27,7 @@ function controlFlow() {
         case "0":
             botText = "logout";
             botSays(botText);
-            menustate = State.LOGOUT
+            menustate = State.LOGOUT;
             break;
         case "1":
             $.get("/prog", {user:"cookie"}, function(aiText){
@@ -45,6 +46,7 @@ function controlFlow() {
             botText = "build schedule menu";
             botSays(botText);
             menustate = State.SCHED;
+            buildSched();
             break;
         case "4":
             botText = "view course description menu";
@@ -64,9 +66,8 @@ function controlFlow() {
             makeOpening();
             break;
     }
-
-
 }
+
 
 function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
@@ -78,20 +79,106 @@ function getProgReq(cookie){
 }
 
 
+function buildSched(){
+    botSays("Input a course?");
+    botSays("or type 0 to return to main menu");
+}
+
+
+function makeSchedule(){
+    var course = getUserText();
+    userSays(course);
+    if ( course.length <= 7 ) {
+        switch(course)
+        {
+            case "0":
+                menustate = State.MAIN;
+                makeOpening();
+                break;
+            default:
+                $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
+                    if (aiText == "bad input") {
+                        botSays("I didn't quite get that--");
+                        buildSched();
+                    }
+                    else {
+                        menustate = State.COURSE;
+                        botSays(aiText);
+                        globalCourse = course;
+                        chooseAction();
+                    }
+                });
+                break;
+        }
+    }
+    else {
+    botSays("I didn't quite get that--");
+    buildSched();
+    }
+}
+
+
+function chooseAction(){
+    botSays("0) choose a different course");
+    botSays("1) get course time");
+    botSays("2) add course to schedule");
+    botSays("3) remove course from schedule");
+}
+
+
+function makeAction(course){
+    var action = getUserText();
+    userSays(action);
+    switch(action)
+    {
+        case "0":
+            menustate = State.SCHED;
+            buildSched();
+            break;
+        case "1":
+            $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction();
+            });
+            break;
+        case "2":
+            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction();
+            });
+            break;
+        case "3":
+            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction();
+            });
+            break;
+        default:
+            botSays("I didn't quite get that--");
+            chooseAction();
+            break;
+    }
+}
+
+
 function classPre(){
     botSays("Which course would you like to know about?");
     botSays("or type 0 to return to main menu");
 }
+
 
 function classDes(){
     botSays("Which course would you like to know about?");
     botSays("or type 0 to return to main menu");
 }
 
+
 function getUserText() {
     // Retrieves the value from the #textinput html object
     return $("#textInput").val();
 }
+
+
 function userSays(str) {
     // Creates an object from the user input with bordering
     var userHtml = '<p class="userText"><span>' + str + '</span></p>';
@@ -100,6 +187,7 @@ function userSays(str) {
     // Remove previous entry from input box
     $("#textInput").val("");
 }
+
 
 function getCourse(category) {
     var course = getUserText();
@@ -111,7 +199,7 @@ function getCourse(category) {
                 makeOpening();
                 break;
             default:
-                $.get("/course", { crs:course, type:category}, function(aiText) {
+                $.get("/course", { crs:course, type:category, user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
                         botSays("I didn't quite get that--")
                         botSays("Which course would you like to know about?");
@@ -132,8 +220,8 @@ function getCourse(category) {
         botSays("Which course would you like to know about?");
         botSays("or type 0 to return to main menu");
     }
-    //botSays("un reachable");
 }
+
 
 function botSays(str) {
         // Creates an object from function output with bordering
@@ -141,6 +229,7 @@ function botSays(str) {
         // Place ai output into chatbox
         $("#chatbox").append(botHtml);
 }
+
 
 function onEnter(){
     $("#textInput").keypress(function(e) {
@@ -150,17 +239,21 @@ function onEnter(){
         }
         else if (menustate == State.PREREQ){
             getCourse("prereqs");
-
         }
         else if (menustate == State.DESC) {
             getCourse("description");
         }
-        //else if (menustate == State.PROGREQ ){
-           // getProgReq();
-        //}
+        else if (menustate == State.SCHED){
+           makeSchedule();
+        }
+        else if (menustate == State.COURSE){
+            makeAction(globalCourse);
+        }
+
         else{
             userSays("ahhhh");
         }
+
 
     }
 });

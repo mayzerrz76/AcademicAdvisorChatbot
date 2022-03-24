@@ -17,19 +17,38 @@ def echo_user_response():
     userText = request.args.get('msg')
     return str(userText) + " echo"
 
+@app.route("/schedule")
+def build_schedule():
+    course = request.args.get('crs')
+    action = request.args.get('type')
+    username = request.args.get('user')
+    if action == "add":
+        #mongo db stuff for adding to here
+        return "schedule with " + str(course) + " added!"
+    elif action == "remove":
+        # mongo db stuff for removing here
+        return str(course) + " removed from schedule"
+    elif action == "query":
+        # mongo db stuff for getting information
+        return str(course) + " date & time"
+
 @app.route("/course")
 def get_course_info():
     course = request.args.get('crs')
     info = request.args.get('type')
+    username = request.args.get('user')
     # impliment logic flow for which data to get depending on the call from the database
-    # if course dne in mongo return bad input
+    # if course DNE in mongo return bad input
     # return "bad input
     if info == "prereqs":
         # heres where the mongo response should go
         return "course prereqs for " + str(course) + " are: "
-    if info == "description":
+    elif info == "description":
         # heres where the mongo response should go
         return "course description for " + str(course) + " is: "
+    elif info == "schedule":
+        # this is technically not needed
+        return "valid course!"
     else:
         return "this shouldn't be accessible!"
 
