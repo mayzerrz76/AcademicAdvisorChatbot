@@ -1,4 +1,3 @@
-import json
 import chatbot.dbobjects as db
 from flask import Flask, render_template, request
 
