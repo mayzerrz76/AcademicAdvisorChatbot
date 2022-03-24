@@ -12,30 +12,11 @@ def home():
     return render_template("index.html")
 
 
-# NEED APP ROUTES FOR ALL SUB MENUS
-@app.route("/main")
-def navigate_main_menu():
-    select = request.args.get('num')
-    if select == "0":
-        return "logout"
-    elif select == "1":
-        return "list program reqs menu"
-    elif select == "2":
-        return "view course pre reqs menu"
-    elif select == "3":
-        return "build schedule menu"
-    elif select == "4":
-        return "view class description menu"
-    elif select == "5":
-        return "view my profile menu"
-    else:
-        return "please enter a whole number between 0 and 5"
-
 @app.route("/test")
 def echo_user_response():
     userText = request.args.get('msg')
     userDate = request.args.get('date')
-    return str(userText) + " " + str(userDate)
+    return str(userText) + " echo"
 
 
 @app.route("/login")
