@@ -4,9 +4,10 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-var menustate = "main";
 
-
+const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7, CHANGEPROF:8 }
+var menustate = State.MAIN;
+var globalCourse = "definitely not null";
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
@@ -63,36 +64,193 @@ function controlFlow() {
             makeOpening();
             break;
     }
-
-
 }
 
-function getProgReq(){
-    var course = getUserText();
-    userSays(course);
+function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
         botSays(aiText);
     });
     botSays("");
-    mainbool = true;
-    progreqbool = false;
+    menustate = State.MAIN;
     makeOpening();
 }
+
+function viewProf(){
+    botSays("Choose a course")
+    botSays("or type 0 to return to main menu")
+}
+
+function editProfile(){
+    var course = getUserText();
+    userSays(course);
+    if ( course.length <= 7 ) {
+        switch(course)
+        {
+            case "0":
+                menustate = State.MAIN;
+                makeOpening();
+                break;
+            default:
+                $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
+                    if (aiText == "bad input") {
+                        botSays("I didn't quite get that--");
+                        viewProf();
+                    }
+                    else {
+                        menustate = State.CHANGEPROF;
+                        botSays(aiText);
+                        globalCourse = course;
+                        chooseAction2();
+                    }
+                });
+                break;
+        }
+    }
+    else {
+    botSays("I didn't quite get that--");
+    viewProf();
+    }
+}
+
+
+function chooseAction2(){
+    botSays("0) choose a different course");
+    botSays("1) add course to schedule");
+    botSays("2) remove course from schedule");
+}
+
+function changeProfile(course){
+   var action = getUserText();
+    userSays(action);
+    switch(action)
+    {
+        case "0":
+            menustate = State.PROF;
+            viewProf();
+            break;
+        case "1":
+            // change this to its own path!
+            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction2();
+            });
+            break;
+        case "2":
+            // change this to its own path!
+            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction2();
+            });
+            break;
+        default:
+            botSays("I didn't quite get that--");
+            chooseAction2();
+            break;
+    }
+}
+
+
+
+function buildSched(){
+    botSays("Input a course?");
+    botSays("or type 0 to return to main menu");
+}
+
+
+function makeSchedule(){
+    var course = getUserText();
+    userSays(course);
+    if ( course.length <= 7 ) {
+        switch(course)
+        {
+            case "0":
+                menustate = State.MAIN;
+                makeOpening();
+                break;
+            default:
+                $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
+                    if (aiText == "bad input") {
+                        botSays("I didn't quite get that--");
+                        buildSched();
+                    }
+                    else {
+                        menustate = State.COURSE;
+                        botSays(aiText);
+                        globalCourse = course;
+                        chooseAction();
+                    }
+                });
+                break;
+        }
+    }
+    else {
+    botSays("I didn't quite get that--");
+    buildSched();
+    }
+}
+
+
+function chooseAction(){
+    botSays("0) choose a different course");
+    botSays("1) get course time");
+    botSays("2) add course to schedule");
+    botSays("3) remove course from schedule");
+}
+
+
+function makeAction(course){
+    var action = getUserText();
+    userSays(action);
+    switch(action)
+    {
+        case "0":
+            menustate = State.SCHED;
+            buildSched();
+            break;
+        case "1":
+            $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction();
+            });
+            break;
+        case "2":
+            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction();
+            });
+            break;
+        case "3":
+            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
+                botSays(aiText);
+                chooseAction();
+            });
+            break;
+        default:
+            botSays("I didn't quite get that--");
+            chooseAction();
+            break;
+    }
+}
+
 
 function classPre(){
     classPreStr = ["Which course would you like to know about?","or type 0 to return to main menu"];
     botMenu(classPreStr);
 }
 
+
 function classDes(){
     classDesStr = ["Which course would you like to know about?","or type 0 to return to main menu"];
     botMenu(classDesStr);
 }
 
+
 function getUserText() {
     // Retrieves the value from the #textinput html object
     return $("#textInput").val();
 }
+
+
 function userSays(str) {
     // Creates an object from the user input with bordering
     var userHtml = '<p class="userText sb2"><span>' + str + '</span></p>';
@@ -102,17 +260,18 @@ function userSays(str) {
     $("#textInput").val("");
 }
 
+
 function getCourse(category) {
     var course = getUserText();
     userSays(course);
     if (course.length <= 7) {
         switch(course){
             case "0":
-                menustate = "main";
+                menustate = State.MAIN;
                 makeOpening();
                 break;
             default:
-                $.get("/course", { crs:course, type:category}, function(aiText) {
+                $.get("/course", { crs:course, type:category, user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
                         botSays("I didn't quite get that--")
                         botSays("Which course would you like to know about?");
@@ -133,8 +292,8 @@ function getCourse(category) {
         botSays("Which course would you like to know about?");
         botSays("or type 0 to return to main menu");
     }
-    //botSays("un reachable");
 }
+
 
 function botMenu(strs) {
         // Creates an object from function output with bordering
@@ -165,6 +324,7 @@ function botMenuStr(str) {
         $("#chatbox").append(botHtml);
 }
 
+
 function botSays(str) {
         // Creates an object from function output with bordering
         var botHtml = '<p class="botText"><span>' + str + '</span></p>';
@@ -172,25 +332,35 @@ function botSays(str) {
         $("#chatbox").append(botHtml);
 }
 
+
 function onEnter(){
     $("#textInput").keypress(function(e) {
     if (e.which === 13) {
-        if (menustate == "main") {
+        if (menustate == State.MAIN) {
             controlFlow();
         }
-        else if (menustate == "prereq"){
+        else if (menustate == State.PREREQ){
             getCourse("prereqs");
-            //botSays("leave loop?")
         }
-        else if (menustate == "desc") {
+        else if (menustate == State.DESC) {
             getCourse("description");
         }
-        else if (menustate == "progreq"){
-            getProgReq();
+        else if (menustate == State.SCHED){
+           makeSchedule();
+        }
+        else if (menustate == State.COURSE){
+            makeAction(globalCourse);
+        }
+        else if (menustate == State.PROF){
+            editProfile();
+        }
+        else if (menustate == State.CHANGEPROF){
+            changeProfile(globalCourse);
         }
         else{
-            getUserText();
+            userSays("ahhhh");
         }
+
 
     }
 });
