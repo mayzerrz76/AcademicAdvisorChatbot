@@ -63,8 +63,7 @@ p {
 
 #chatbox {
     border: 5px solid #C2530B;
-    min-height: 530px;
-    max-height: 650px;
+    height: 650px;
     overflow: scroll;
     border-radius: 25px;
     background-color: white;

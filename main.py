@@ -9,7 +9,7 @@ def home():
     # allows for interacting with login page
     # return render_template("login.html")
     # allow for interacting with chatbot page
-    return render_template("login.html")
+    return render_template("index.html")
 
 @app.route("/chatbot")
 def landing_page():

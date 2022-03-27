@@ -9,6 +9,30 @@ const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, 
 var menustate = State.MAIN;
 var globalCourse = "definitely not null";
 
+//Add a function to
+window.onload = function() {
+  scrollDiv_init();
+};
+ScrollRate = 5;
+function scrollDiv_init() {
+  DivElmnt = document.getElementById('chatbox');
+  DivElmnt.onmouseover = pauseDiv;
+  DivElmnt.onmouseout = resumeDiv;
+  ReachedMaxScroll = false;
+  DivElmnt.scrollTop = 0;
+  PreviousScrollTop  = 0;
+  ScrollInterval = setInterval('scrollDiv()', ScrollRate);
+}
+function scrollDiv() {
+    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight +100;
+}
+function pauseDiv() {
+  clearInterval(ScrollInterval);
+}
+function resumeDiv() {
+  ScrollInterval = setInterval('scrollDiv()', ScrollRate);
+}
+
 // Creates the opening options for the chatbot!
 function makeOpening() {
     var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
