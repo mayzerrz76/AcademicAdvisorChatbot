@@ -11,10 +11,11 @@ var globalCourse = "definitely not null";
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
-    var opening = ["HOW CAN I HELP YOU?", "0) Logout", "1) List Program Reqs.", "2) View Course Pre-Reqs.", "3) Build Schedule", "4) View Class Description", "5) View My Profile"];
-    for (let i = 0; i < opening.length; i++ ) {
-        botSays(opening[i]);
-    }
+    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
+    //for (let i = 0; i < opening.length; i++ ) {
+        //botSays(opening[i]);
+    botMenu(opening);
+    //}
 }
 
 makeOpening();
@@ -26,44 +27,40 @@ function controlFlow() {
     {
         case "0":
             botText = "logout";
-            botSays(botText);
-            menustate = State.LOGOUT;
+            botMenuStr(botText);
+            menustate = "logout";
             break;
         case "1":
-            $.get("/prog", {user:"cookie"}, function(aiText){
-                botSays(aiText);
-                botSays("");
-                makeOpening();
-            });
+            botText = "list program reqs menu  'WORK TODO";
+            botMenuStr(botText);
+            menustate = "progreq";
+            getProgReq();
             break;
         case "2":
-            botText = "view course pre reqs menu";
-            botSays(botText);
-            menustate = State.PREREQ;
+            botText = "view course pre reqs menu  'WORK TODO";
+            botMenuStr(botText);
+            menustate = "prereq";
             classPre();
             break;
         case "3":
-            botText = "build schedule menu";
-            botSays(botText);
-            menustate = State.SCHED;
-            buildSched();
+            botText = "build schedule menu  'WORK TODO";
+            botMenuStr(botText);
+            menustate = "sched";
             break;
         case "4":
-            botText = "view course description menu";
-            botSays(botText);
-            menustate = State.DESC;
+            botText = "view course description menu  'WORK TODO";
+            botMenuStr(botText);
+            menustate = "desc";
             classDes();
             break;
         case "5":
-            botText = "view my profile menu";
-            botSays(botText);
-            menustate = State.PROF;
-            viewProf();
+            botText = "view my profile menu  'WORK TODO";
+            botMenuStr(botText);
+            menustate = "prof";
             break;
         default:
             botText = "please enter a whole number between 0 and 5";
-            botSays(botText);
-            botSays("");
+            botMenuStr(botText);
             makeOpening();
             break;
     }
@@ -237,14 +234,14 @@ function makeAction(course){
 
 
 function classPre(){
-    botSays("Which course would you like to know about?");
-    botSays("or type 0 to return to main menu");
+    classPreStr = ["Which course would you like to know about?","or type 0 to return to main menu"];
+    botMenu(classPreStr);
 }
 
 
 function classDes(){
-    botSays("Which course would you like to know about?");
-    botSays("or type 0 to return to main menu");
+    classDesStr = ["Which course would you like to know about?","or type 0 to return to main menu"];
+    botMenu(classDesStr);
 }
 
 
@@ -256,7 +253,7 @@ function getUserText() {
 
 function userSays(str) {
     // Creates an object from the user input with bordering
-    var userHtml = '<p class="userText"><span>' + str + '</span></p>';
+    var userHtml = '<p class="userText sb2"><span>' + str + '</span></p>';
     // Place user input into chatbox
     $("#chatbox").append(userHtml);
     // Remove previous entry from input box
@@ -295,6 +292,36 @@ function getCourse(category) {
         botSays("Which course would you like to know about?");
         botSays("or type 0 to return to main menu");
     }
+}
+
+
+function botMenu(strs) {
+        // Creates an object from function output with bordering
+        var botHtml = '';
+        var inside = '<span>';
+        var i = 0;
+        for (i = 0; i < strs.length; i++ ) {
+            if (i == (strs.length -1)){
+                inside = inside + strs[i] + '</span>';
+            }
+            else {
+                inside = inside + strs[i] + '<br>';
+            }
+        }
+
+        //}
+        botHtml = '<div class="botMsg sb1"><p class="botText">' + inside + '</p></div>';
+        // Place ai output into chatbox
+        $("#chatbox").append(botHtml);
+}
+
+function botMenuStr(str) {
+        // Creates an object from function output with bordering
+        var botHtml = '';
+        var inside = '<span>' + str + '</span>';
+        botHtml = '<div class="botMsg sb1"><p class="botText">' + inside + '</p></div>';
+        // Place ai output into chatbox
+        $("#chatbox").append(botHtml);
 }
 
 
