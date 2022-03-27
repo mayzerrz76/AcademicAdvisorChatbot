@@ -11,6 +11,9 @@ def home():
     # allow for interacting with chatbot page
     return render_template("index.html")
 
+#@app.route("/chatbot")
+#def landing_page():
+   # return render_template("index.html")
 
 @app.route("/test")
 def echo_user_response():

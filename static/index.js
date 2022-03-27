@@ -28,35 +28,39 @@ function controlFlow() {
         case "0":
             botText = "logout";
             botMenuStr(botText);
-            menustate = "logout";
+            menustate = State.LOGOUT;
             break;
         case "1":
             botText = "list program reqs menu  'WORK TODO";
             botMenuStr(botText);
-            menustate = "progreq";
-            getProgReq();
+             $.get("/prog", {user:"cookie"}, function(aiText){
+                botMenuStr(aiText);
+                makeOpening();
+            });
             break;
         case "2":
             botText = "view course pre reqs menu  'WORK TODO";
             botMenuStr(botText);
-            menustate = "prereq";
+            menustate = State.PREREQ;
             classPre();
             break;
         case "3":
             botText = "build schedule menu  'WORK TODO";
             botMenuStr(botText);
-            menustate = "sched";
+            menustate = State.SCHED;
+            buildSched();
             break;
         case "4":
             botText = "view course description menu  'WORK TODO";
             botMenuStr(botText);
-            menustate = "desc";
+            menustate = State.DESC;
             classDes();
             break;
         case "5":
             botText = "view my profile menu  'WORK TODO";
             botMenuStr(botText);
-            menustate = "prof";
+            menustate = State.PROF;
+            viewProf();
             break;
         default:
             botText = "please enter a whole number between 0 and 5";
@@ -66,18 +70,18 @@ function controlFlow() {
     }
 }
 
-function getProgReq(cookie){
+/* function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
-        botSays(aiText);
+        botMenu([aiText,"----------");
     });
-    botSays("");
     menustate = State.MAIN;
     makeOpening();
-}
+} */
 
 function viewProf(){
-    botSays("Choose a course")
-    botSays("or type 0 to return to main menu")
+    botMenu(["Choose a course","or type 0 to return to main menu"])
+    //botSays("Choose a course")
+   // botSays("or type 0 to return to main menu")
 }
 
 function editProfile(){
@@ -93,12 +97,12 @@ function editProfile(){
             default:
                 $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
-                        botSays("I didn't quite get that--");
+                        botMenuStr("I didn't quite get that--");
                         viewProf();
                     }
                     else {
                         menustate = State.CHANGEPROF;
-                        botSays(aiText);
+                        botMenuStr(aiText);
                         globalCourse = course;
                         chooseAction2();
                     }
@@ -107,16 +111,17 @@ function editProfile(){
         }
     }
     else {
-    botSays("I didn't quite get that--");
+    botMenuStr("I didn't quite get that--");
     viewProf();
     }
 }
 
 
 function chooseAction2(){
-    botSays("0) choose a different course");
-    botSays("1) add course to schedule");
-    botSays("2) remove course from schedule");
+    botMenu(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
+    //botSays("0) choose a different course");
+    //botSays("1) add course to schedule");
+    //botSays("2) remove course from schedule");
 }
 
 function changeProfile(course){
@@ -131,19 +136,19 @@ function changeProfile(course){
         case "1":
             // change this to its own path!
             $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
-                botSays(aiText);
+                botMenuStr(aiText);
                 chooseAction2();
             });
             break;
         case "2":
             // change this to its own path!
             $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
-                botSays(aiText);
+                botMenuStr(aiText);
                 chooseAction2();
             });
             break;
         default:
-            botSays("I didn't quite get that--");
+            botMenuStr("I didn't quite get that--");
             chooseAction2();
             break;
     }
@@ -152,8 +157,9 @@ function changeProfile(course){
 
 
 function buildSched(){
-    botSays("Input a course?");
-    botSays("or type 0 to return to main menu");
+    botMenu(["Input a course?", "or type 0 to return to main menu"]);
+    //botSays("Input a course?");
+    //botSays("or type 0 to return to main menu");
 }
 
 
@@ -170,12 +176,12 @@ function makeSchedule(){
             default:
                 $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
-                        botSays("I didn't quite get that--");
+                        botMenuStr("I didn't quite get that--");
                         buildSched();
                     }
                     else {
                         menustate = State.COURSE;
-                        botSays(aiText);
+                        botMenuStr(aiText);
                         globalCourse = course;
                         chooseAction();
                     }
@@ -184,17 +190,18 @@ function makeSchedule(){
         }
     }
     else {
-    botSays("I didn't quite get that--");
+    botMenuStr("I didn't quite get that--");
     buildSched();
     }
 }
 
 
 function chooseAction(){
-    botSays("0) choose a different course");
+    botMenu(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+    /*botSays("0) choose a different course");
     botSays("1) get course time");
     botSays("2) add course to schedule");
-    botSays("3) remove course from schedule");
+    botSays("3) remove course from schedule");*/
 }
 
 
@@ -209,24 +216,24 @@ function makeAction(course){
             break;
         case "1":
             $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
-                botSays(aiText);
+                botMenuStr(aiText);
                 chooseAction();
             });
             break;
         case "2":
             $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
-                botSays(aiText);
+                botMenuStr(aiText);
                 chooseAction();
             });
             break;
         case "3":
             $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
-                botSays(aiText);
+                botMenuStr(aiText);
                 chooseAction();
             });
             break;
         default:
-            botSays("I didn't quite get that--");
+            botMenuStr("I didn't quite get that--");
             chooseAction();
             break;
     }
@@ -273,14 +280,15 @@ function getCourse(category) {
             default:
                 $.get("/course", { crs:course, type:category, user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
-                        botSays("I didn't quite get that--")
+                        botMenu(["I didn't quite get that--","Which course would you like to know about?", "or type 0 to return to main menu"]);
+                        /*botSays("I didn't quite get that--")
                         botSays("Which course would you like to know about?");
-                        botSays("or type 0 to return to main menu");
+                        botSays("or type 0 to return to main menu"); */
                     }
                     else{
-                        botSays(aiText);
-                        botSays("Would you like to know about another course?");
-                        botSays("or type 0 to return to main menu");
+                        botMenu([aiText, "Would you like to know about another course?", "or type 0 to return to main menu" ]);
+                        /* botSays("Would you like to know about another course?");
+                        botSays("or type 0 to return to main menu"); */
                     }
 
                 });
@@ -288,9 +296,10 @@ function getCourse(category) {
         }
     }
     else {
-        botSays("I didn't quite get that--")
+        botMenu(["I didn't quite get that--", "Which course would you like to know about?", "or type 0 to return to main menu" ]);
+        /*botSays("I didn't quite get that--")
         botSays("Which course would you like to know about?");
-        botSays("or type 0 to return to main menu");
+        botSays("or type 0 to return to main menu"); */
     }
 }
 
@@ -325,12 +334,12 @@ function botMenuStr(str) {
 }
 
 
-function botSays(str) {
+/*function botSays(str) {
         // Creates an object from function output with bordering
         var botHtml = '<p class="botText"><span>' + str + '</span></p>';
         // Place ai output into chatbox
         $("#chatbox").append(botHtml);
-}
+} */
 
 
 function onEnter(){

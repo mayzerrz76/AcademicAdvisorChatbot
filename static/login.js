@@ -10,6 +10,9 @@ function checkPassword() {
     // replace check with any pair from database
     $.get("/login", { user:x, pass:y }, function(output){
         document.getElementById("demo").innerHTML = output;
+        $.get("/chatbot", {}, function(url){
+        window.location.assign(url)
+        });
 
     });
 }
