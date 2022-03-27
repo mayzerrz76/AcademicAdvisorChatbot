@@ -5,7 +5,7 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 
-const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7, CHANGEPROF:8 }
+const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7, CHANGEPROF:8, WHICHPROG:9 }
 var menustate = State.MAIN;
 var globalCourse = "definitely not null";
 
@@ -23,6 +23,8 @@ function scrollDiv_init() {
   DivElmnt = document.getElementById('chatbox');
   //attach function to run when mouse is hovering over chatbox div
   DivElmnt.onmouseover = pauseDiv;
+  //attach function to run when mouse is scrolling on chatbox, even if the browser is not the active application highlighted
+  //DivElmnt.onscroll = pauseDiv;
   //attach function to run when mouse is not-hovering over chatbox div
   DivElmnt.onmouseout = resumeDiv;
   // Messing with this to try and get chatbot to scroll to the bottom
@@ -54,9 +56,6 @@ function makeOpening() {
         window.location.pathname = "/";
     }
     var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
-    //for (let i = 0; i < opening.length; i++ ) {
-        //botSays(opening[i]);
-    //}
     botMenu(opening);
 }
 
@@ -76,12 +75,10 @@ function controlFlow() {
             window.location.pathname = "/";
             break;
         case "1":
-            botText = "list program reqs menu  'WORK TODO";
+            whichProgram();
+            botText = "****get choice from user and fetch prog info from DB 'WORK TODO****";
             botMenuStr(botText);
-             $.get("/prog", {user:"cookie"}, function(aiText){
-                botMenuStr(aiText);
-                makeOpening();
-            });
+            menustate = State.PROGREQ;
             break;
         case "2":
             botText = "view course pre reqs menu  'WORK TODO";
@@ -115,13 +112,49 @@ function controlFlow() {
     }
 }
 
-/* function getProgReq(cookie){
+function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
-        botMenu([aiText,"----------");
+        botMenu([aiText,"----------"]);
     });
     menustate = State.MAIN;
     makeOpening();
-} */
+}
+
+function whichProgram() {
+    botMenu(["Choose A Program:","-----------------","0.)Return to Main Menu","1.)Computer Science","2.)Mathematics" ]);
+}
+
+function progReqControlFlow() {
+    var progMenuSelection = getUserText();
+    userSays(progMenuSelection);
+    switch(progMenuSelection)
+    {
+        case "0":
+            abotText = "logout";
+            botMenuStr(abotText);
+            menustate = State.Main;
+            makeOpening();
+            break;
+        case "1":
+            abotText = "****fetch CIS prog info from DB  'WORK TODO****";
+            botMenuStr(abotText);
+            $.get("/getCISReqs");
+
+            menustate = State.MAIN;
+            break;
+        case "2":
+            abotText = "****fetch MAT prog info from DB  'WORK TODO****";
+            botMenuStr(abotText);
+            menustate = State.MAIN;
+            break;
+        default:
+            abotText = "Please enter a valid menu selection! (1-2)";
+            botMenuStr(abotText);
+            whichProgram();
+            break;
+    }
+
+}
 
 function viewProf(){
     botMenu(["Choose a course or type 0 to return to main menu"])
@@ -408,6 +441,9 @@ function onEnter(){
         }
         else if (menustate == State.CHANGEPROF){
             changeProfile(globalCourse);
+        }
+        else if (menustate == State.PROGREQ){
+            progReqControlFlow();
         }
         else{
             userSays("ahhhh");

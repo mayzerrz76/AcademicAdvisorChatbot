@@ -1,4 +1,5 @@
 import chatbot.dbobjects as db
+import chatbot.dbprogreqs as reqDB
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -75,6 +76,13 @@ def validate_login():
     else:
         return ""
 
+@app.route("/getCISReqs")
+def cis_prog_reqs():
+    cisReqDB = reqDB.CisReqs.get_database()
+    compScience = ["Computer Science Requirements:","------------------------------"]
+    #collectionSize = cisReqDB.count()
+    print(cisReqDB)
+    return tuple(compScience)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
