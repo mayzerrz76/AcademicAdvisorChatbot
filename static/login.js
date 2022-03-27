@@ -9,11 +9,12 @@ function checkPassword() {
     var password = document.getElementById("userPswd").value;
     // replace check with any pair from database
     $.get("/login", { user:username, pass:password }, function(output){
-        if (output == "correct login!"){
-            window.location.pathname = "/chatbot";
+        if (output == ""){
+            document.getElementById("demo").innerHTML = "Incorrect username or password";
         }
         else {
-            document.getElementById("demo").innerHTML = output;
+            document.cookie = "username=" + username
+            window.location.pathname = "/chatbot";
         }
     });
 
