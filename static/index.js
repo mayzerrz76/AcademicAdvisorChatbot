@@ -49,11 +49,15 @@ function resumeDiv() {
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
+    if (document.cookie.split('=')[1] == '' ) {
+        botMenuStr("You are not logged in. Redirecting to login page...");
+        window.location.pathname = "/";
+    }
     var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
     //for (let i = 0; i < opening.length; i++ ) {
         //botSays(opening[i]);
-    botMenu(opening);
     //}
+    botMenu(opening);
 }
 
 //Initial message
@@ -65,9 +69,10 @@ function controlFlow() {
     switch(rawText)
     {
         case "0":
-            botText = "logout";
+            botText = "Logging out...";
             botMenuStr(botText);
             menustate = State.LOGOUT;
+            document.cookie = "username=;expires=-1"
             window.location.pathname = "/";
             break;
         case "1":
@@ -97,7 +102,7 @@ function controlFlow() {
             classDes();
             break;
         case "5":
-            botText = "view my profile menu  'WORK TODO";
+            botText = "Your profile:";
             botMenuStr(botText);
             menustate = State.PROF;
             viewProf();
@@ -119,9 +124,7 @@ function controlFlow() {
 } */
 
 function viewProf(){
-    botMenu(["Choose a course","or type 0 to return to main menu"])
-    //botSays("Choose a course")
-   // botSays("or type 0 to return to main menu")
+    botMenu(["Choose a course or type 0 to return to main menu"])
 }
 
 function editProfile(){
