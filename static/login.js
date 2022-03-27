@@ -3,16 +3,18 @@ var script = document.createElement('script');
 script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
-
+var random;
 function checkPassword() {
-    var x = document.getElementById("userName").value;
-    var y = document.getElementById("userPswd").value;
+    var username = document.getElementById("userName").value;
+    var password = document.getElementById("userPswd").value;
     // replace check with any pair from database
-    $.get("/login", { user:x, pass:y }, function(output){
-        document.getElementById("demo").innerHTML = output;
-        $.get("/chatbot", {}, function(url){
-        window.location.assign(url)
-        });
-
+    $.get("/login", { user:username, pass:password }, function(output){
+        if (output == "correct login!"){
+            window.location.pathname = "/chatbot";
+        }
+        else {
+            document.getElementById("demo").innerHTML = output;
+        }
     });
+
 }

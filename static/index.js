@@ -29,6 +29,7 @@ function controlFlow() {
             botText = "logout";
             botMenuStr(botText);
             menustate = State.LOGOUT;
+            window.location.pathname = "/";
             break;
         case "1":
             botText = "list program reqs menu  'WORK TODO";
