@@ -8,21 +8,7 @@ document.getElementsByTagName('head')[0].appendChild(script);
 const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7 }
 var menustate = State.MAIN;
 
-
-
-
-// Creates the opening options for the chatbot!
-function makeOpening() {
-    if (document.cookie.split('=')[1] == '' ) {
-        botMenuStr("You are not logged in. Redirecting to login page...");
-        window.location.pathname = "/";
-    }
-    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
-    botMenu(opening);
-}
-
 var globalCourse;
-
 
 // ------- RUN THE PROGRAM -------
 //Initial message
