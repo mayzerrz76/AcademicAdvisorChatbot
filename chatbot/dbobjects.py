@@ -146,7 +146,7 @@ class Req:
     @staticmethod
     def from_mongo(document):
         if type(document) is dict:
-            return (lambda d: Req(**d, from_mongo=True))(document)
+            return (lambda d: Req(**d))(document)
         elif type(document) is str:
             try:
                 full_document = Req.REQS.find({'prog_name': document}).next()

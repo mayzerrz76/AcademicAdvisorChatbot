@@ -5,7 +5,7 @@ script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7 }
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8 }
 var menustate = State.MAIN;
 
 
@@ -37,11 +37,12 @@ function controlFlow() {
             break;
         // handles the program requirements case
         case "1":
-            var program;
+            //var program;
             $.get("/prog", {user:username}, function(aiText){
+                aiText = aiText.split('\n');
                 botSays(aiText);
-                program = aiText;
-                writeMainMenu();
+                //program = aiText;
+                //writeMainMenu();
             });
             //botSays(program);
             break;
@@ -337,6 +338,8 @@ function onEnter(){
                 case State.CHANGEPROF:
                     profileControlFlow(globalCourse);
                     break;
+                case State.PROGREQ;
+                    progReqControlFlow();
                 default:
                     userSays("ahhhh");
             }

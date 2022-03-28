@@ -61,13 +61,17 @@ def get_program():
     # heres where the database should be queried for program requirements
     currentUser = db.UserAccount.from_mongo(username)
     programs = currentUser.degree_programs
-    #proReqs = db.Req.from_mongo(programs[0])
+    proList = []
     for program in programs:
-        print(program)
-    #    proReqs = db.Req.from_mongo(program)
-    #    cores = proReqs.core_reqs
-
-    return "your program requirements are: " + str(programs)
+        proList.append(program + " Requirements:")
+        proList.append("---------------")
+        proList.append("Core Requirements:")
+        proReqs = db.Req.from_mongo(program)
+        cores = proReqs.core_reqs
+        for course in cores:
+            proList.append(course)
+        print(str(proList))
+    return '\n'.join(proList)
 
 # appropriate login procedure
 @app.route("/login")
