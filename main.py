@@ -82,7 +82,8 @@ def cis_prog_reqs():
     cisReqDB = reqDB.CisReqs.get_database()
     compScience = ["Computer Science Requirements:","------------------------------"]
     #collectionSize = cisReqDB.count()
-    print(cisReqDB)
+
+    print(cisReqDB.find())
     return tuple(compScience)
 
 if __name__ == '__main__':
