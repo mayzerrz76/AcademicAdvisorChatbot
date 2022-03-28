@@ -122,6 +122,7 @@ class Course:
         else:
             raise TypeError('document must be a dict or a string')
 
+
 class ReqType(Enum):
     BASE = 1
     AND = 2
@@ -161,4 +162,5 @@ class Req:
     # (or if not, how many credits remain)
     def credits_remaining(self):
         pass
+
 
