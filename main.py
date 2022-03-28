@@ -1,5 +1,4 @@
 import chatbot.dbobjects as db
-import chatbot.dbprogreqs as reqDB
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -57,10 +56,22 @@ def get_course_info():
 
 # allows for retrieving program requirements
 @app.route("/prog")
-def get_program_requirements():
+def get_program():
     username = request.args.get('user')
     # heres where the database should be queried for program requirements
-    return "your program requirements are: " + str(username)
+    currentUser = db.UserAccount.from_mongo(username)
+    programs = currentUser.degree_programs
+    proList = []
+    for program in programs:
+        proList.append(program + " Requirements:")
+        proList.append("---------------")
+        proList.append("Core Requirements:")
+        proReqs = db.Req.from_mongo(program)
+        cores = proReqs.core_reqs
+        for course in cores:
+            proList.append(course)
+        print(str(proList))
+    return '\n'.join(proList)
 
 # appropriate login procedure
 @app.route("/login")
@@ -75,17 +86,6 @@ def validate_login():
         return username
     else:
         return ""
-
-
-# gets Program requirements for CIS program?
-@app.route("/getCISReqs")
-def cis_prog_reqs():
-    cisReqDB = reqDB.CisReqs.get_database()
-    compScience = ["Computer Science Requirements:","------------------------------"]
-    #collectionSize = cisReqDB.count()
-
-    print(cisReqDB.find())
-    return tuple(compScience)
 
 @app.route("/view-profile")
 def view_profile():
@@ -150,7 +150,6 @@ def add_course_taken():
     return message
 
 @app.route('/course-description')
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)

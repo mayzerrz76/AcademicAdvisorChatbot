@@ -4,8 +4,13 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
+//sleep function
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7 }
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8 }
 var menustate = State.MAIN;
 
 
@@ -37,12 +42,9 @@ function controlFlow() {
             break;
         // handles the program requirements case
         case "1":
-            //botText = "****get choice from user and fetch prog info from DB 'WORK TODO****";
-            //botSays(botText);
-            $.get("/prog", {user:"cookie"}, function(aiText){
-                botSays(aiText);
-                writeMainMenu();
-            });
+            menustate = State.PROGREQ;
+            getProgReq(username);
+            //menustate = State.MAIN;
             break;
         // handles the course prerequisite case
         case "2":
@@ -84,13 +86,27 @@ function controlFlow() {
 // ---------------------------------PROGRAM REQUIREMENTS FUNCTIONS START----------------------------------
 
 // SHOULD output the users program requirements (specific to user?)
-function getProgReq(cookie){
-    $.get("/prog", {user:cookie}, function(aiText){
-        botSays([aiText,"----------"]);
+async function getProgReq(user_name){
+    $.get("/prog", {user:user_name}, function(aiText){
+        aiText = aiText.split('\n');
+        botSays(aiText);
+        //menustate = State.PROGREQ;
+        botSays("Enter input to return to main menu...");
+        //progReqControlFlow();
     });
-    menustate = State.MAIN;
-    writeMainMenu();
 }
+
+async function printWait(howLong){
+    await sleep(howLong);
+}
+
+function progReqControlFlow(){
+    userInput = getUserText();
+    userSays(userInput);
+    writeMainMenu();
+    menustate = State.MAIN;
+}
+
 
 // ----------------------------- PROGRAM REQUIREMENTS FUNCTIONS END -------------------------------------
 
@@ -364,6 +380,9 @@ function onEnter(){
                     courseDescription();
                 case State.CHANGEPROF:
                     profileControlFlow(globalCourse);
+                    break;
+                case State.PROGREQ:
+                    progReqControlFlow();
                     break;
                 default:
                     userSays("ahhhh");
