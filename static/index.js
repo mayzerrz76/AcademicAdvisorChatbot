@@ -24,20 +24,23 @@ function scrollDiv_init() {
   //attach function to run when mouse is hovering over chatbox div
   DivElmnt.onmouseover = pauseDiv;
   //attach function to run when mouse is scrolling on chatbox, even if the browser is not the active application highlighted
-  //DivElmnt.onscroll = pauseDiv;
+  DivElmnt.onscroll = pauseDiv;
   //attach function to run when mouse is not-hovering over chatbox div
-  DivElmnt.onmouseout = resumeDiv;
+  //DivElmnt.onmouseout = resumeDiv;
   // Messing with this to try and get chatbot to scroll to the bottom
   // if they scrolled up, after a message is sent and the mouse is still hovering over
   // the chatbox it won't scroll to bottom until you move mouse out of the chatbox, trying to fix
-  //InpElmnt = document.getElementById('textInput');
-  //InpElmnt.onkeydown = resumeDiv;
+  InpElmnt = document.getElementById('textInput');
+  InpElmnt.onkeydown = scrollDiv;
+  InpElmnt.onkeyup = scrollDiv;
   DivElmnt.scrollTop = 0;
   ScrollInterval = setInterval('scrollDiv()', ScrollRate);
 }
 //function to scroll chatbox element to the bottom
 function scrollDiv() {
-    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight +100;
+    if (event.keyCode ==13){
+        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
+    }
 }
 //function to pause scrolling on chatbox element to the bottom
 //this happens when the mouse pointer is in the chatbox
