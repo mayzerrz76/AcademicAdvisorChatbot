@@ -118,3 +118,32 @@ class Course:
             return Course.from_mongo(full_document)
         else:
             raise TypeError('document must be a dict or a string')
+
+class Req:
+    REQS = DATABASE['progReqs']
+
+    def __init__(self, prog_name: str, core_reqs=None, _id=None):
+
+        self.prog_name = prog_name
+
+        if self.core_reqs is None:
+            self.core_reqs = []
+
+        self.update_database()
+
+    def update_database(self):
+        Req.REQS.delete_one({'prog_name': self.prog_name})
+        Req.REQS.insert_one(self.__dict__)
+
+    @staticmethod
+    def from_mongo(document):
+        if type(document) is dict:
+            return (lambda d: Req(**d, from_mongo=True))(document)
+        elif type(document) is str:
+            try:
+                full_document = Req.REQS.find({'prog_name': document}).next()
+            except StopIteration:
+                raise KeyError('Program does not exist')
+            return Req.from_mongo(full_document)
+        else:
+            raise TypeError('document must be a dict or a string')
