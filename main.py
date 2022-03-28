@@ -76,6 +76,7 @@ def validate_login():
     else:
         return ""
 
+
 # gets Program requirements for CIS program?
 @app.route("/getCISReqs")
 def cis_prog_reqs():
@@ -85,6 +86,11 @@ def cis_prog_reqs():
 
     print(cisReqDB.find())
     return tuple(compScience)
+
+@app.route("/view-profile")
+def view_profile():
+    username = request.args.get('user')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)

@@ -1,3 +1,4 @@
+from enum import Enum
 import json
 import pymongo
 import certifi
@@ -73,23 +74,25 @@ class UserAccount:
 class Course:
     COURSES = DATABASE['courses']
 
-    def __init__(self, course_id: str, course_num: str, subject_code: str, section: str, location: str, instructor: str,
-                 days: str, times: str, semester: str, description: str, prereqs=None, coreqs=None, from_mongo=False, _id=None):
+    def __init__(self, course_id: str, subject_code: str, course_num: str, credits: int, section: str, location: str, instructor: str,
+                 days: str, time: str, semester: str, title: str, description: str, prereqs=None, coreqs=None, from_mongo=False, _id=None):
 
-        # If this is a new database entry, validate the username
+        # If this is a new database entry, validate the course id
         if not from_mongo:
             identical_users = self.COURSES.find({'course_id': course_id})
             if len(list(identical_users)):
-                raise KeyError('A user with that username already exists')
+                raise KeyError('A course with that course id already exists')
 
         self.course_id = course_id
-        self.course_num = course_num
         self.subject_code = subject_code
+        self.course_num = course_num
+        self.credits = credits
         self.section = section
+        self.title = title
         self.location = location
         self.instructor = instructor
         self.days = days
-        self.times = times
+        self.time = time
         self.semester = semester
         self.description = description
         self.prereqs = prereqs
@@ -119,6 +122,11 @@ class Course:
         else:
             raise TypeError('document must be a dict or a string')
 
+class ReqType(Enum):
+    BASE = 1
+    AND = 2
+    OR = 3
+
 class Req:
     REQS = DATABASE['progReqs']
 
@@ -135,6 +143,7 @@ class Req:
         Req.REQS.delete_one({'prog_name': self.prog_name})
         Req.REQS.insert_one(self.__dict__)
 
+
     @staticmethod
     def from_mongo(document):
         if type(document) is dict:
@@ -147,3 +156,9 @@ class Req:
             return Req.from_mongo(full_document)
         else:
             raise TypeError('document must be a dict or a string')
+
+    # Implement something here for checking if the requirement is fulfilled
+    # (or if not, how many credits remain)
+    def credits_remaining(self):
+        pass
+
