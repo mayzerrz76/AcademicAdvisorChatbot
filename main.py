@@ -1,9 +1,10 @@
 import chatbot.dbobjects as db
+import chatbot.dbprogreqs as reqDB
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-
+# loads the login page
 @app.route("/")
 def home():
     # allows for interacting with login page
@@ -11,16 +12,13 @@ def home():
     # allow for interacting with chatbot page
     return render_template("login.html")
 
+# loads the chatbot page
 @app.route("/chatbot")
 def landing_page():
 
     return render_template("index.html")
 
-@app.route("/test")
-def echo_user_response():
-    userText = request.args.get('msg')
-    return str(userText) + " echo"
-
+# allows for editing a user schedule object
 @app.route("/schedule")
 def build_schedule():
     course = request.args.get('crs')
@@ -36,6 +34,7 @@ def build_schedule():
         # mongo db stuff for getting information
         return str(course) + " date & time"
 
+# allows for retrieving course information
 @app.route("/course")
 def get_course_info():
     course = request.args.get('crs')
@@ -56,12 +55,14 @@ def get_course_info():
     else:
         return "this shouldn't be accessible!"
 
+# allows for retrieving program requirements
 @app.route("/prog")
 def get_program_requirements():
     username = request.args.get('user')
     # heres where the database should be queried for program requirements
     return "your program requirements are: " + str(username)
 
+# appropriate login procedure
 @app.route("/login")
 def validate_login():
     username = request.args.get('user')
@@ -75,9 +76,21 @@ def validate_login():
     else:
         return ""
 
+
+# gets Program requirements for CIS program?
+@app.route("/getCISReqs")
+def cis_prog_reqs():
+    cisReqDB = reqDB.CisReqs.get_database()
+    compScience = ["Computer Science Requirements:","------------------------------"]
+    #collectionSize = cisReqDB.count()
+
+    print(cisReqDB.find())
+    return tuple(compScience)
+
 @app.route("/view-profile")
 def view_profile():
     username = request.args.get('user')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
