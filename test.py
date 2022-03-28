@@ -2,7 +2,7 @@ import chatbot.dbobjects as db
 
 # Course testing
 
-db.Course.COURSES.delete_many({'course_id': '12345'})
+# db.Course.COURSES.delete_many({'course_id': '12345'})
 
 courseA = db.Course(course_id='12345',
                     subject_code='TST',
@@ -22,9 +22,9 @@ courseA = db.Course(course_id='12345',
 print(courseA.course_id)
 print(courseA.course_num)
 
-reconstructed_courseA = db.Course.from_mongo('12345')
-print(reconstructed_courseA.credits)
-print(reconstructed_courseA.time)
+# reconstructed_courseA = db.Course.from_mongo('12345')
+# print(reconstructed_courseA.credits)
+# print(reconstructed_courseA.time)
 
 # Old user testing stuff
 """

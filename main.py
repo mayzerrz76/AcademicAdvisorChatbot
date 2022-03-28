@@ -90,6 +90,66 @@ def validate_login():
 @app.route("/view-profile")
 def view_profile():
     username = request.args.get('user')
+    current_user = db.UserAccount.from_mongo(username)
+
+    profile_view = '--- Profile Info: ---\n'
+    profile_view += 'Username: ' + current_user.username + '\n'
+    profile_view += 'Degree programs: '
+    if current_user.degree_programs:
+        profile_view += ' '.join(current_user.degree_programs)
+    else:
+        profile_view += 'none'
+    profile_view += '\nCourses taken: '
+    if current_user.courses_taken:
+        profile_view += ' '.join(current_user.courses_taken)
+    else:
+        profile_view += 'none'
+    profile_view += '\nPlanner: '
+    if current_user.planner:
+        profile_view += ' '.join(current_user.planner)
+    else:
+        profile_view += 'none'
+
+    return profile_view
+
+
+@app.route("/validate-course")
+def validate_course():
+    course = request.args.get('crs')
+    if len(course) != 7 or len(course.split()) != 2:
+        return "False"
+    subject_code, course_num = course.split()
+    matching_courses = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num})
+    if len(list(matching_courses)):
+        return "True"
+    return "False"
+
+
+@app.route('/course-taken')
+def add_course_taken():
+    username = request.args.get('user')
+    course = request.args.get('crs')
+    operation = request.args.get('operation')
+
+    this_user = db.UserAccount.from_mongo(username)
+    message = ''
+    if operation == 'add':
+        if course not in this_user.courses_taken:
+            this_user.courses_taken.append(course)
+            this_user.courses_taken = sorted(this_user.courses_taken)
+            message = course + ' successfully added.'
+        else:
+            message = course + ' already listed as taken.'
+    elif operation == 'remove':
+        if course in this_user.courses_taken:
+            this_user.courses_taken.remove(course)
+            message = course + ' successfully removed.'
+        else:
+            message = course + ' not listed as taken.'
+    this_user.update_database()
+    return message
+
+@app.route('/course-description')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
