@@ -149,6 +149,8 @@ def add_course_taken():
     this_user.update_database()
     return message
 
+@app.route('/course-description')
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)

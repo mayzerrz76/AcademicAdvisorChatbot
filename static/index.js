@@ -297,7 +297,10 @@ function courseDescription() {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                     }
                     else {
-                        botSays("Test message please ignore");
+                        $.get('/course-description', {crs: course}, function(description) {
+                            botSays(description);
+                            botSays("Enter another course or type 0 to return to main menu");
+                        });
                     }
                 });
                 break;
