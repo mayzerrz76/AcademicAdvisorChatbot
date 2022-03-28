@@ -123,54 +123,54 @@ class Course:
             raise TypeError('document must be a dict or a string')
 
 
-class ReqType(Enum):
-    BASE = 1
-    AND = 2
-    OR = 3
-
-
-class Requirement:
-    REQUIREMENTS = DATABASE['requirements']
-
-    def __init__(self, name: str, req_type: ReqType, credits: int, courses=None, subrequirements=None, from_mongo=False, _id=None):
-
-        # If this is a new database entry, validate the requirement name
-        if not from_mongo:
-            identical_users = self.COURSES.find({'name': name})
-            if len(list(identical_users)):
-                raise KeyError('A requirement with that name already exists')
-
-        self.name = name
-        self.req_type = req_type
-
-        # Implement something more sophisticated for and / or
-        self.credits = credits
-
-        if courses is None:
-            self.courses = []
-        if subrequirements is None:
-            self.subrequirements = []
-
-        self.update_database()
-
-    def update_database(self):
-        Requirements.REQUIREMENTS.delete_one({'name': self.name})
-        Requirements.REQUIREMENTS.insert_one(self.__dict__)
-
-    @staticmethod
-    def from_mongo(document):
-        if type(document) is dict:
-            return (lambda d: Requirements(**d, from_mongo=True))(document)
-        elif type(document) is str:
-            try:
-                full_document = Requirement.REQUIREMENTS.find({'name': document}).next()
-            except StopIteration:
-                raise KeyError('Requirement does not exist')
-            return Requirement.from_mongo(full_document)
-        else:
-            raise TypeError('document must be a dict or a string')
-
-    # Implement something here for checking if the requirement is fulfilled
-    # (or if not, how many credits remain)
-    def credits_remaining(self):
-        pass
+# class ReqType(Enum):
+#     BASE = 1
+#     AND = 2
+#     OR = 3
+#
+#
+# class Requirement:
+#     REQUIREMENTS = DATABASE['requirements']
+#
+#     def __init__(self, name: str, req_type: ReqType, credits: int, courses=None, subrequirements=None, from_mongo=False, _id=None):
+#
+#         # If this is a new database entry, validate the requirement name
+#         if not from_mongo:
+#             identical_users = self.COURSES.find({'name': name})
+#             if len(list(identical_users)):
+#                 raise KeyError('A requirement with that name already exists')
+#
+#         self.name = name
+#         self.req_type = req_type
+#
+#         # Implement something more sophisticated for and / or
+#         self.credits = credits
+#
+#         if courses is None:
+#             self.courses = []
+#         if subrequirements is None:
+#             self.subrequirements = []
+#
+#         self.update_database()
+#
+#     def update_database(self):
+#         Requirements.REQUIREMENTS.delete_one({'name': self.name})
+#         Requirements.REQUIREMENTS.insert_one(self.__dict__)
+#
+#     @staticmethod
+#     def from_mongo(document):
+#         if type(document) is dict:
+#             return (lambda d: Requirements(**d, from_mongo=True))(document)
+#         elif type(document) is str:
+#             try:
+#                 full_document = Requirement.REQUIREMENTS.find({'name': document}).next()
+#             except StopIteration:
+#                 raise KeyError('Requirement does not exist')
+#             return Requirement.from_mongo(full_document)
+#         else:
+#             raise TypeError('document must be a dict or a string')
+#
+#     # Implement something here for checking if the requirement is fulfilled
+#     # (or if not, how many credits remain)
+#     def credits_remaining(self):
+#         pass

@@ -2,29 +2,29 @@ import chatbot.dbobjects as db
 
 # Course testing
 
-db.Course.COURSES.delete_many({'course_id': '12345'})
-
-courseA = db.Course(course_id='12345',
-                    subject_code='TST',
-                    course_num='123',
-                    credits=3,
-                    section='M001',
-                    location='Building 000',
-                    instructor='Professor',
-                    days='MWF',
-                    time='13:00-14:30',
-                    semester='Spring 2022',
-                    title='Example Course',
-                    description='Course content',
-                    prereqs=['ECS 101'],
-                    coreqs=['TST 321']
-                    )
-print(courseA.course_id)
-print(courseA.course_num)
-
-reconstructed_courseA = db.Course.from_mongo('12345')
-print(reconstructed_courseA.credits)
-print(reconstructed_courseA.time)
+# db.Course.COURSES.delete_many({'course_id': '12345'})
+#
+# courseA = db.Course(course_id='12345',
+#                     subject_code='TST',
+#                     course_num='123',
+#                     credits=3,
+#                     section='M001',
+#                     location='Building 000',
+#                     instructor='Professor',
+#                     days='MWF',
+#                     time='13:00-14:30',
+#                     semester='Spring 2022',
+#                     title='Example Course',
+#                     description='Course content',
+#                     prereqs=['ECS 101'],
+#                     coreqs=['TST 321']
+#                     )
+# print(courseA.course_id)
+# print(courseA.course_num)
+#
+# reconstructed_courseA = db.Course.from_mongo('12345')
+# print(reconstructed_courseA.credits)
+# print(reconstructed_courseA.time)
 
 # Old user testing stuff
 """

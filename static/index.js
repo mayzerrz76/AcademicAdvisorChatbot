@@ -114,17 +114,16 @@ function controlFlow() {
             break;
         // handles the course description case
         case "4":
-            botText = "view course description menu  'WORK TODO";
-            botSays(botText);
             menustate = State.DESC;
-            botSays(["Which course would you like to know about?","or type 0 to return to main menu"]);
+            botSays(["Enter a course to view information or type 0 to return to main menu"]);
             break;
         // handles the viewing profile case
         case "5":
-            botText = "Your profile:";
-            botSays(botText);
+            $.get("/view-profile", {user:username}, function(profileView){
+                botSays(profileView.split('\n'));
+                botSays("Choose a course to add or remove from courses taken or type 0 to return to main menu");
+            });
             menustate = State.PROF;
-            botSays("Choose a course or type 0 to return to main menu");
             break;
         // handles all other bad input
         default:
@@ -153,60 +152,61 @@ function getProgReq(cookie){
 function editProfile(){
     var course = getUserText();
     userSays(course);
-    if ( course.length <= 7 ) {
-        switch(course)
-        {
+
+    switch(course) {
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
             default:
-                $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
-                    if (aiText == "bad input") {
+                $.get("/validate-course", {crs: course}, function(aiText) {
+                    if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                     }
                     else {
                         menustate = State.CHANGEPROF;
-                        botSays(aiText);
                         globalCourse = course;
-                        botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
+                        botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
                     }
                 });
                 break;
-        }
-    }
-    else {
-    botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
     }
 }
 
 
 function profileControlFlow(course){
-   var action = getUserText();
+
+    var action = getUserText();
     userSays(action);
     switch(action)
     {
         case "0":
             menustate = State.PROF;
-            botSays("Choose a course or type 0 to return to main menu");
+            botSays("Choose a course to add to your course taken or type 0 to return to main menu");
             break;
         case "1":
-            // change this to its own path!
-            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+            $.get("/course-taken", {crs:globalCourse, operation:"add", user:username}, function(aiText){
                 botSays(aiText);
-                botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
+                $.get("/view-profile", {user:username}, function(profileView){
+                    botSays(profileView.split('\n'));
+                    botSays("Choose a course or type 0 to return to main menu");
+                });
             });
+            menustate = State.PROF;
             break;
         case "2":
-            // change this to its own path!
-            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
+            $.get("/course-taken", {crs:globalCourse, operation:"remove", user:username}, function(aiText){
                 botSays(aiText);
-                botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
+                $.get("/view-profile", {user:username}, function(profileView){
+                    botSays(profileView.split('\n'));
+                    botSays("Choose a course or type 0 to return to main menu");
+                });
             });
+            menustate = State.PROF;
             break;
         default:
             botSays("I didn't quite get that--");
-            botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
+            botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
             break;
     }
 }
@@ -280,6 +280,30 @@ function scheduleChoices(course){
     }
 }
 // ----------------------------- BUILD SCHEDULE FUNCTIONS END -------------------------------------
+
+// ------------------------------ COURSE DESCRIPTION FUNCTION START -------------------------------
+function courseDescription() {
+    var course = getUserText();
+    userSays(course);
+
+    switch(course) {
+            case "0":
+                menustate = State.MAIN;
+                writeMainMenu();
+                break;
+            default:
+                $.get("/validate-course", {crs: course}, function(aiText) {
+                    if (aiText == "False") {
+                        botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                    }
+                    else {
+                        botSays("Test message please ignore");
+                    }
+                });
+                break;
+    }
+}
+// ------------------------------ COURSE DESCRIPTION FUNCTION END ---------------------------------
 
 // ----------------------------- COURSE ACTION FUNCTION START -------------------------------------
 function getCourse(category) {
@@ -387,6 +411,8 @@ function onEnter(){
                 case State.PROF:
                     editProfile();
                     break;
+                case State.DESC:
+                    courseDescription();
                 case State.CHANGEPROF:
                     profileControlFlow(globalCourse);
                     break;
