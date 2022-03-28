@@ -8,6 +8,8 @@ document.getElementsByTagName('head')[0].appendChild(script);
 const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7 }
 var menustate = State.MAIN;
 
+var username = document.cookie.split('=')[1];
+
 
 //Add a function to initialize the auto-scroll feature on page load
 window.onload = function() {
@@ -54,7 +56,7 @@ function resumeDiv() {
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
-    if (document.cookie.split('=')[1] == '' ) {
+    if (username == '' ) {
         botMenuStr("You are not logged in. Redirecting to login page...");
         window.location.pathname = "/";
     }
