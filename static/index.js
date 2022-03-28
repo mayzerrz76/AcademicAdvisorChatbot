@@ -4,10 +4,10 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
-
-const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7, CHANGEPROF:8, WHICHPROG:9 }
+// Instantiate global variables and switch-variable State
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7 }
 var menustate = State.MAIN;
-var globalCourse = "definitely not null";
+
 
 //Add a function to initialize the auto-scroll feature on page load
 window.onload = function() {
@@ -62,107 +62,92 @@ function makeOpening() {
     botMenu(opening);
 }
 
-//Initial message
-makeOpening();
+var globalCourse;
 
+
+// ------- RUN THE PROGRAM -------
+//Initial message
+writeMainMenu();
+// wait for enter key press
+onEnter();
+// -------- END PROGRAM --------
+
+// --------------------------------- MAIN MENU START ----------------------------------
 function controlFlow() {
+    // retrieve user text for main menu
     var rawText = getUserText();
     userSays(rawText);
     switch(rawText)
     {
+        // handles the logout case redirecting back to the login screen
         case "0":
             botText = "Logging out...";
-            botMenuStr(botText);
+            botSays(botText);
             menustate = State.LOGOUT;
             document.cookie = "username=;expires=-1"
             window.location.pathname = "/";
             break;
+        // handles the program requirements case
         case "1":
-            whichProgram();
-            botText = "****get choice from user and fetch prog info from DB 'WORK TODO****";
-            botMenuStr(botText);
-            menustate = State.PROGREQ;
+            //botText = "****get choice from user and fetch prog info from DB 'WORK TODO****";
+            //botSays(botText);
+            $.get("/prog", {user:"cookie"}, function(aiText){
+                botSays(aiText);
+                writeMainMenu();
+            });
             break;
+        // handles the course prerequisite case
         case "2":
             botText = "view course pre reqs menu  'WORK TODO";
-            botMenuStr(botText);
+            botSays(botText);
             menustate = State.PREREQ;
-            classPre();
+            botSays(["Which course would you like to know about?","or type 0 to return to main menu"]);
             break;
+        // handles the building schedule case
         case "3":
             botText = "build schedule menu  'WORK TODO";
-            botMenuStr(botText);
+            botSays(botText);
             menustate = State.SCHED;
-            buildSched();
+            botSays(["Input a course?", "or type 0 to return to main menu"]);
             break;
+        // handles the course description case
         case "4":
             botText = "view course description menu  'WORK TODO";
-            botMenuStr(botText);
+            botSays(botText);
             menustate = State.DESC;
-            classDes();
+            botSays(["Which course would you like to know about?","or type 0 to return to main menu"]);
             break;
+        // handles the viewing profile case
         case "5":
             botText = "Your profile:";
-            botMenuStr(botText);
+            botSays(botText);
             menustate = State.PROF;
-            viewProf();
+            botSays("Choose a course or type 0 to return to main menu");
             break;
+        // handles all other bad input
         default:
             botText = "please enter a whole number between 0 and 5";
-            botMenuStr(botText);
-            makeOpening();
+            botSays(botText);
+            writeMainMenu();
             break;
     }
 }
+// --------------------------------- MAIN MENU END ----------------------------------
 
+// ---------------------------------PROGRAM REQUIREMENTS FUNCTIONS START----------------------------------
+
+// SHOULD output the users program requirements (specific to user?)
 function getProgReq(cookie){
     $.get("/prog", {user:cookie}, function(aiText){
-        botMenu([aiText,"----------"]);
+        botSays([aiText,"----------"]);
     });
     menustate = State.MAIN;
-    makeOpening();
+    writeMainMenu();
 }
 
-function whichProgram() {
-    botMenu(["Choose A Program:","-----------------","0.)Return to Main Menu","1.)Computer Science","2.)Mathematics" ]);
-}
+// ----------------------------- PROGRAM REQUIREMENTS FUNCTIONS END -------------------------------------
 
-function progReqControlFlow() {
-    var progMenuSelection = getUserText();
-    userSays(progMenuSelection);
-    switch(progMenuSelection)
-    {
-        case "0":
-            abotText = "logout";
-            botMenuStr(abotText);
-            menustate = State.Main;
-            makeOpening();
-            break;
-        case "1":
-            abotText = "****fetch CIS prog info from DB  'WORK TODO****";
-            botMenuStr(abotText);
-            $.get("/getCISReqs");
-
-            menustate = State.MAIN;
-            break;
-        case "2":
-            abotText = "****fetch MAT prog info from DB  'WORK TODO****";
-            botMenuStr(abotText);
-            menustate = State.MAIN;
-            break;
-        default:
-            abotText = "Please enter a valid menu selection! (1-2)";
-            botMenuStr(abotText);
-            whichProgram();
-            break;
-    }
-
-}
-
-function viewProf(){
-    botMenu(["Choose a course or type 0 to return to main menu"])
-}
-
+// ----------------------------- USER PROFILE FUNCTIONS START -------------------------------------
 function editProfile(){
     var course = getUserText();
     userSays(course);
@@ -171,78 +156,62 @@ function editProfile(){
         {
             case "0":
                 menustate = State.MAIN;
-                makeOpening();
+                writeMainMenu();
                 break;
             default:
                 $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
-                        botMenuStr("I didn't quite get that--");
-                        viewProf();
+                        botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                     }
                     else {
                         menustate = State.CHANGEPROF;
-                        botMenuStr(aiText);
+                        botSays(aiText);
                         globalCourse = course;
-                        chooseAction2();
+                        botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
                     }
                 });
                 break;
         }
     }
     else {
-    botMenuStr("I didn't quite get that--");
-    viewProf();
+    botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
     }
 }
 
 
-function chooseAction2(){
-    botMenu(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
-    //botSays("0) choose a different course");
-    //botSays("1) add course to schedule");
-    //botSays("2) remove course from schedule");
-}
-
-function changeProfile(course){
+function profileControlFlow(course){
    var action = getUserText();
     userSays(action);
     switch(action)
     {
         case "0":
             menustate = State.PROF;
-            viewProf();
+            botSays("Choose a course or type 0 to return to main menu");
             break;
         case "1":
             // change this to its own path!
             $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
-                botMenuStr(aiText);
-                chooseAction2();
+                botSays(aiText);
+                botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
             });
             break;
         case "2":
             // change this to its own path!
             $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
-                botMenuStr(aiText);
-                chooseAction2();
+                botSays(aiText);
+                botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
             });
             break;
         default:
-            botMenuStr("I didn't quite get that--");
-            chooseAction2();
+            botSays("I didn't quite get that--");
+            botSays(["0) choose a different course","1) add course to schedule","2) remove course from schedule"]);
             break;
     }
 }
+// ----------------------------- USER PROFILE FUNCTIONS END -------------------------------------
 
-
-
-function buildSched(){
-    botMenu(["Input a course?", "or type 0 to return to main menu"]);
-    //botSays("Input a course?");
-    //botSays("or type 0 to return to main menu");
-}
-
-
-function makeSchedule(){
+// ----------------------------- BUILD SCHEDULE FUNCTIONS START -------------------------------------
+function scheduleControlFlow(){
     var course = getUserText();
     userSays(course);
     if ( course.length <= 7 ) {
@@ -250,93 +219,104 @@ function makeSchedule(){
         {
             case "0":
                 menustate = State.MAIN;
-                makeOpening();
+                writeMainMenu();
                 break;
             default:
                 $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
                     if (aiText == "bad input") {
-                        botMenuStr("I didn't quite get that--");
-                        buildSched();
+                        botSays("I didn't quite get that--");
+                        botSays(["Input a course?", "or type 0 to return to main menu"]);
                     }
                     else {
                         menustate = State.COURSE;
-                        botMenuStr(aiText);
+                        botSays(aiText);
                         globalCourse = course;
-                        chooseAction();
+                        botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
                     }
                 });
                 break;
         }
     }
     else {
-    botMenuStr("I didn't quite get that--");
-    buildSched();
+    botSays("I didn't quite get that--");
+    botSays(["Input a course?", "or type 0 to return to main menu"]);
     }
 }
 
 
-function chooseAction(){
-    botMenu(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
-    /*botSays("0) choose a different course");
-    botSays("1) get course time");
-    botSays("2) add course to schedule");
-    botSays("3) remove course from schedule");*/
-}
-
-
-function makeAction(course){
+function scheduleChoices(course){
     var action = getUserText();
     userSays(action);
     switch(action)
     {
         case "0":
             menustate = State.SCHED;
-            buildSched();
+            botSays(["Input a course?", "or type 0 to return to main menu"]);
             break;
         case "1":
             $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
-                botMenuStr(aiText);
-                chooseAction();
+                botSays(aiText);
+                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
             });
             break;
         case "2":
             $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
-                botMenuStr(aiText);
-                chooseAction();
+                botSays(aiText);
+                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
             });
             break;
         case "3":
             $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
-                botMenuStr(aiText);
-                chooseAction();
+                botSays(aiText);
+                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
             });
             break;
         default:
-            botMenuStr("I didn't quite get that--");
-            chooseAction();
+            botSays("I didn't quite get that--");
+            botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
             break;
+    }
+}
+// ----------------------------- BUILD SCHEDULE FUNCTIONS END -------------------------------------
+
+// ----------------------------- COURSE ACTION FUNCTION START -------------------------------------
+function getCourse(category) {
+    var course = getUserText();
+    userSays(course);
+    if (course.length <= 7) {
+        switch(course){
+            case "0":
+                menustate = State.MAIN;
+                writeMainMenu();
+                break;
+            default:
+                $.get("/course", { crs:course, type:category, user:"cookie"}, function(aiText) {
+                    if (aiText == "bad input") {
+                        botSays(["I didn't quite get that--","Which course would you like to know about?", "or type 0 to return to main menu"]);
+                    }
+                    else{
+                        botSays(aiText);
+                        botSays(["Would you like to know about another course?", "or type 0 to return to main menu" ]);
+                    }
+
+                });
+                break;
+        }
+    }
+    else {
+        botSays(["I didn't quite get that--", "Which course would you like to know about?", "or type 0 to return to main menu" ]);
     }
 }
 
 
-function classPre(){
-    classPreStr = ["Which course would you like to know about?","or type 0 to return to main menu"];
-    botMenu(classPreStr);
-}
+// ------------------------------------ PRINTING TO SCREEN FUNCTIONS START ------------------------
 
-
-function classDes(){
-    classDesStr = ["Which course would you like to know about?","or type 0 to return to main menu"];
-    botMenu(classDesStr);
-}
-
-
+// Retrieves the value from the #textinput html object, this function just improves readability
 function getUserText() {
-    // Retrieves the value from the #textinput html object
     return $("#textInput").val();
 }
 
-
+// Prints the user's inputs to the chatbox
 function userSays(str) {
     // Creates an object from the user input with bordering
     var userHtml = '<p class="userText sb2"><span>' + str + '</span></p>';
@@ -346,48 +326,24 @@ function userSays(str) {
     $("#textInput").val("");
 }
 
-
-function getCourse(category) {
-    var course = getUserText();
-    userSays(course);
-    if (course.length <= 7) {
-        switch(course){
-            case "0":
-                menustate = State.MAIN;
-                makeOpening();
-                break;
-            default:
-                $.get("/course", { crs:course, type:category, user:"cookie"}, function(aiText) {
-                    if (aiText == "bad input") {
-                        botMenu(["I didn't quite get that--","Which course would you like to know about?", "or type 0 to return to main menu"]);
-                        /*botSays("I didn't quite get that--")
-                        botSays("Which course would you like to know about?");
-                        botSays("or type 0 to return to main menu"); */
-                    }
-                    else{
-                        botMenu([aiText, "Would you like to know about another course?", "or type 0 to return to main menu" ]);
-                        /* botSays("Would you like to know about another course?");
-                        botSays("or type 0 to return to main menu"); */
-                    }
-
-                });
-                break;
-        }
-    }
-    else {
-        botMenu(["I didn't quite get that--", "Which course would you like to know about?", "or type 0 to return to main menu" ]);
-        /*botSays("I didn't quite get that--")
-        botSays("Which course would you like to know about?");
-        botSays("or type 0 to return to main menu"); */
-    }
-}
-
-
-function botMenu(strs) {
+// Prints the bot's outputs to the chatbox, can accept both strings and arrays of strings
+function botSays(strs) {
+    // have the bot print a single line
+    if (typeof strs == "string")
+    {
         // Creates an object from function output with bordering
         var botHtml = '';
+        var inside = '<span>' + strs + '</span>';
+        botHtml = '<div class="botMsg sb1"><p class="botText">' + inside + '</p></div>';
+        // Place ai output into chatbox
+        $("#chatbox").append(botHtml);
+    }
+    // Creates an object from function output with bordering
+    // have the bot print multiple lines
+    else {
+        var botHtml = '';
         var inside = '<span>';
-        var i = 0;
+        var i;
         for (i = 0; i < strs.length; i++ ) {
             if (i == (strs.length -1)){
                 inside = inside + strs[i] + '</span>';
@@ -397,67 +353,97 @@ function botMenu(strs) {
             }
         }
 
-        //}
+        //
         botHtml = '<div class="botMsg sb1"><p class="botText">' + inside + '</p></div>';
         // Place ai output into chatbox
         $("#chatbox").append(botHtml);
-}
-
-function botMenuStr(str) {
-        // Creates an object from function output with bordering
-        var botHtml = '';
-        var inside = '<span>' + str + '</span>';
-        botHtml = '<div class="botMsg sb1"><p class="botText">' + inside + '</p></div>';
-        // Place ai output into chatbox
-        $("#chatbox").append(botHtml);
-}
-
-
-/*function botSays(str) {
-        // Creates an object from function output with bordering
-        var botHtml = '<p class="botText"><span>' + str + '</span></p>';
-        // Place ai output into chatbox
-        $("#chatbox").append(botHtml);
-} */
-
-
-function onEnter(){
-    $("#textInput").keypress(function(e) {
-    if (e.which === 13) {
-        if (menustate == State.MAIN) {
-            controlFlow();
-        }
-        else if (menustate == State.PREREQ){
-            getCourse("prereqs");
-        }
-        else if (menustate == State.DESC) {
-            getCourse("description");
-        }
-        else if (menustate == State.SCHED){
-           makeSchedule();
-        }
-        else if (menustate == State.COURSE){
-            makeAction(globalCourse);
-        }
-        else if (menustate == State.PROF){
-            editProfile();
-        }
-        else if (menustate == State.CHANGEPROF){
-            changeProfile(globalCourse);
-        }
-        else if (menustate == State.PROGREQ){
-            progReqControlFlow();
-        }
-        else{
-            userSays("ahhhh");
-        }
-
-
     }
-});
+}
+// ------------------------------------ PRINTING TO SCREEN FUNCTIONS END ------------------------
+
+// ------------------------------------ NAVIGATION CONTROL START ------------------------
+
+// waits for keystrokes. The nervous system of the entire chatbot
+function onEnter(){
+    // waits for enter to be pressed "getting" user input
+    $("#textInput").keypress(function(e) {
+        if (e.which === 13) {
+            // handles which submenu to toggle to based on the State
+            switch(menustate){
+                case State.MAIN:
+                    controlFlow();
+                    break;
+                case State.PREREQ:
+                    getCourse("prereqs");
+                    break;
+                case State.SCHED:
+                    scheduleControlFlow();
+                    break;
+                case State.COURSE:
+                    scheduleChoices(globalCourse);
+                    break;
+                case State.PROF:
+                    editProfile();
+                    break;
+                case State.CHANGEPROF:
+                    profileControlFlow(globalCourse);
+                    break;
+                default:
+                    userSays("ahhhh");
+            }
+        }
+    });
 }
 
-// wait for enter key press
-onEnter();
+// writes the opening options for the chatbot!
+function writeMainMenu() {
+    if (document.cookie.split('=')[1] == '' ) {
+        botSays("You are not logged in. Redirecting to login page...");
+        window.location.pathname = "/";
+    }
+    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
+    botSays(opening);
+}
+// ------------------------------------ NAVIGATION CONTROL END ------------------------
 
+// ----------------------------- SCROLLING FUNCTIONALITY START -------------------------------------
+//Add a function to initialize the auto-scroll feature on page load
+window.onload = function() {
+  scrollDiv_init();
+};
+// This 5 is a magic number don't touch it, JK, I don't have time to explain in this comment how/why it works, but it does
+ScrollRate = 5;
 
+//Initializes our chatbox div in index.html to run certain functions when the mouse is either
+//over the chat box(i.e., actively scrolling through), or off the chat box
+function scrollDiv_init() {
+  //Get the chatbox div element we want to add auto-scroll to
+  DivElmnt = document.getElementById('chatbox');
+  //attach function to run when mouse is hovering over chatbox div
+  DivElmnt.onmouseover = pauseDiv;
+  //attach function to run when mouse is scrolling on chatbox, even if the browser is not the active application highlighted
+  //DivElmnt.onscroll = pauseDiv;
+  //attach function to run when mouse is not-hovering over chatbox div
+  DivElmnt.onmouseout = resumeDiv;
+  // Messing with this to try and get chatbot to scroll to the bottom
+  // if they scrolled up, after a message is sent and the mouse is still hovering over
+  // the chatbox it won't scroll to bottom until you move mouse out of the chatbox, trying to fix
+  //InpElmnt = document.getElementById('textInput');
+  //InpElmnt.onkeydown = resumeDiv;
+  DivElmnt.scrollTop = 0;
+  ScrollInterval = setInterval('scrollDiv()', ScrollRate);
+}
+//function to scroll chatbox element to the bottom
+function scrollDiv() {
+    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight +100;
+}
+//function to pause scrolling on chatbox element to the bottom
+//this happens when the mouse pointer is in the chatbox
+function pauseDiv() {
+  clearInterval(ScrollInterval);
+}
+//calls the scroll div above, w the scroll rate
+function resumeDiv() {
+  ScrollInterval = setInterval('scrollDiv()', ScrollRate);
+}
+// ------------------------------------------ SCROLLING FUNCTIONALITY END ----------------------
