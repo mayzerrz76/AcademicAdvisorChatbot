@@ -75,6 +75,9 @@ def validate_login():
     else:
         return ""
 
+@app.route("/view-profile")
+def view_profile():
+    username = request.args.get('user')
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)

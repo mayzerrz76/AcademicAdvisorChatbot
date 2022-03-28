@@ -8,6 +8,7 @@ document.getElementsByTagName('head')[0].appendChild(script);
 const State = { MAIN:0, PROGREQ:1, PREREQ:2, SCHED:3, DESC:4, PROF:5, LOGOUT:6, COURSE:7, CHANGEPROF:8 }
 var menustate = State.MAIN;
 var globalCourse = "definitely not null";
+var username = document.cookie.split('=')[1];
 
 //Add a function to initialize the auto-scroll feature on page load
 window.onload = function() {
@@ -49,7 +50,7 @@ function resumeDiv() {
 
 // Creates the opening options for the chatbot!
 function makeOpening() {
-    if (document.cookie.split('=')[1] == '' ) {
+    if (username == '' ) {
         botMenuStr("You are not logged in. Redirecting to login page...");
         window.location.pathname = "/";
     }
@@ -124,7 +125,7 @@ function controlFlow() {
 } */
 
 function viewProf(){
-    botMenu(["Choose a course or type 0 to return to main menu"])
+
 }
 
 function editProfile(){
