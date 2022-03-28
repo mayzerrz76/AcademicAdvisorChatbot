@@ -160,4 +160,3 @@ class Req:
     # (or if not, how many credits remain)
     def credits_remaining(self):
         pass
-

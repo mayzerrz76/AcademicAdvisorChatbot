@@ -87,20 +87,9 @@ def validate_login():
     else:
         return ""
 
-
-# gets Program requirements for CIS program?
-@app.route("/getCISReqs")
-def cis_prog_reqs():
-    #cisReqDB = reqDB.CisReqs.get_database()
-    compScience = ["Computer Science Requirements:","------------------------------"]
-    #collectionSize = cisReqDB.count()
-
-    return tuple(compScience)
-
 @app.route("/view-profile")
 def view_profile():
     username = request.args.get('user')
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
