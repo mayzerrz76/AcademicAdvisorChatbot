@@ -131,9 +131,8 @@ class Req:
     REQS = DATABASE['progReqs']
 
     def __init__(self, prog_name: str, core_reqs=None, _id=None):
-
         self.prog_name = prog_name
-
+        self.core_reqs = core_reqs
         if self.core_reqs is None:
             self.core_reqs = []
 

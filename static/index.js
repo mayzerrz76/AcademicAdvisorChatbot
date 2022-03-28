@@ -37,12 +37,13 @@ function controlFlow() {
             break;
         // handles the program requirements case
         case "1":
-            //botText = "****get choice from user and fetch prog info from DB 'WORK TODO****";
-            //botSays(botText);
-            $.get("/prog", {user:"cookie"}, function(aiText){
+            var program;
+            $.get("/prog", {user:username}, function(aiText){
                 botSays(aiText);
+                program = aiText;
                 writeMainMenu();
             });
+            //botSays(program);
             break;
         // handles the course prerequisite case
         case "2":
