@@ -149,7 +149,14 @@ def add_course_taken():
     this_user.update_database()
     return message
 
-# @app.route('/course-description')
+
+@app.route('/course-description')
+def course_description():
+    course = request.args.get('crs')
+    this_course = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num}).next()
+    return this_course.description
+
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)

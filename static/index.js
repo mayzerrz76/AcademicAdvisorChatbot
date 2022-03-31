@@ -259,7 +259,7 @@ function courseDescription() {
                     }
                     else {
                         $.get('/course-description', {crs: course}, function(description) {
-                            botSays(description);
+                            botSays([course + ":", description]);
                             botSays("Enter another course or type 0 to return to main menu");
                         });
                     }
