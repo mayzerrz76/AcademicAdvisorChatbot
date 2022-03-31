@@ -70,7 +70,7 @@ def get_program():
         cores = proReqs.core_reqs
         for course in cores:
             proList.append(course)
-        print(str(proList))
+        # print(str(proList))
     return '\n'.join(proList)
 
 # appropriate login procedure
@@ -153,9 +153,10 @@ def add_course_taken():
 @app.route('/course-description')
 def course_description():
     course = request.args.get('crs')
+    subject_code, course_num = course.split()
     this_course = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num}).next()
+    this_course = db.Course.from_mongo(this_course)
     return this_course.description
-
 
 
 if __name__ == '__main__':
