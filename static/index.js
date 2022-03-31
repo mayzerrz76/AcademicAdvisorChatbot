@@ -247,7 +247,6 @@ function scheduleChoices(course){
 function courseDescription() {
     var course = getUserText();
     userSays(course);
-
     switch(course) {
             case "0":
                 menustate = State.MAIN;
@@ -378,6 +377,7 @@ function onEnter(){
                     break;
                 case State.DESC:
                     courseDescription();
+                    break;
                 case State.CHANGEPROF:
                     profileControlFlow(globalCourse);
                     break;
