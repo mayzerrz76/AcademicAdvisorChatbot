@@ -132,9 +132,8 @@ class Req:
     REQS = DATABASE['progReqs']
 
     def __init__(self, prog_name: str, core_reqs=None, _id=None):
-
         self.prog_name = prog_name
-
+        self.core_reqs = core_reqs
         if self.core_reqs is None:
             self.core_reqs = []
 
@@ -148,7 +147,7 @@ class Req:
     @staticmethod
     def from_mongo(document):
         if type(document) is dict:
-            return (lambda d: Req(**d, from_mongo=True))(document)
+            return (lambda d: Req(**d))(document)
         elif type(document) is str:
             try:
                 full_document = Req.REQS.find({'prog_name': document}).next()
@@ -162,5 +161,3 @@ class Req:
     # (or if not, how many credits remain)
     def credits_remaining(self):
         pass
-
-

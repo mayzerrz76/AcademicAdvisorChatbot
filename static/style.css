@@ -155,7 +155,8 @@ p {
     margin-bottom: 10px;
     border: 5px solid #C2530B;
     background-color:navy;
-    max-width: 70%;
+    min-width: 50%;
+    max-width: 85%;
     border-radius: 10px;
     position: relative;
     margin-left:10px;
