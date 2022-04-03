@@ -70,6 +70,7 @@ function controlFlow() {
             $.get("/view-profile", {user:username}, function(profileView){
                 botSays(profileView.split('\n'));
                 botSays("Choose a course to add or remove from courses taken or type 0 to return to main menu");
+                DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
             });
             menustate = State.PROF;
             break;
