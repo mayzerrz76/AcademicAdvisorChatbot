@@ -93,6 +93,7 @@ async function getProgReq(user_name){
         //menustate = State.PROGREQ;
         botSays("Enter input to return to main menu...");
         //progReqControlFlow();
+        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
     });
 }
 
@@ -124,11 +125,13 @@ function editProfile(){
                 $.get("/validate-course", {crs: course}, function(aiText) {
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                     else {
                         menustate = State.CHANGEPROF;
                         globalCourse = course;
                         botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                 });
                 break;
@@ -152,6 +155,7 @@ function profileControlFlow(course){
                 $.get("/view-profile", {user:username}, function(profileView){
                     botSays(profileView.split('\n'));
                     botSays("Choose a course or type 0 to return to main menu");
+                    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                 });
             });
             menustate = State.PROF;
@@ -162,6 +166,7 @@ function profileControlFlow(course){
                 $.get("/view-profile", {user:username}, function(profileView){
                     botSays(profileView.split('\n'));
                     botSays("Choose a course or type 0 to return to main menu");
+                    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                 });
             });
             menustate = State.PROF;
@@ -169,6 +174,7 @@ function profileControlFlow(course){
         default:
             botSays("I didn't quite get that--");
             botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
+            DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
             break;
     }
 }
@@ -196,6 +202,7 @@ function scheduleControlFlow(){
                         botSays(aiText);
                         globalCourse = course;
                         botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                 });
                 break;
@@ -256,11 +263,13 @@ function courseDescription() {
                 $.get("/validate-course", {crs: course}, function(aiText) {
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                     else {
                         $.get('/course-description', {crs: course}, function(description) {
                             botSays([course + ":", description]);
                             botSays("Enter another course or type 0 to return to main menu");
+                            DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                         });
                     }
                 });
