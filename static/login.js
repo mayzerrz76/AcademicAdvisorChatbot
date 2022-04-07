@@ -19,3 +19,7 @@ function checkPassword() {
     });
 
 }
+
+function newAccount(){
+    window.location.pathname = "/newUser";
+}
