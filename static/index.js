@@ -10,7 +10,7 @@ function sleep(ms) {
 }
 
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8 }
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CLUBS:10 }
 var menustate = State.MAIN;
 
 
@@ -74,6 +74,15 @@ function controlFlow() {
             });
             menustate = State.PROF;
             break;
+        case "6":
+            botSays("Clubs submenu for Arpit?");
+            writeMainMenu();
+            break;
+        case "7":
+            botSays(["List of important contact info", "DPS (###)-###-####", "SUICIDE HOTLINE (###)-###-####", "SEXUAL ASSAULT HOTLINE (###)-###-####", "Arpit's iPhone (###)-###-####"]);
+            botSays("Enter input to return to main menu...");
+            menustate = State.CONTACT;
+            break;
         // handles all other bad input
         default:
             botText = "please enter a whole number between 0 and 5";
@@ -84,6 +93,18 @@ function controlFlow() {
 }
 // --------------------------------- MAIN MENU END ----------------------------------
 
+// --------------------------------CONTACT INFO FUNCTION START----------
+
+
+
+// --------------------------------CONTACT INFO FUNCTION END------------
+function contactInfoControlFlow(){
+    userInput = getUserText();
+    userSays(userInput);
+    writeMainMenu();
+    menustate = State.MAIN;
+}
+
 // ---------------------------------PROGRAM REQUIREMENTS FUNCTIONS START----------------------------------
 
 // SHOULD output the users program requirements (specific to user?)
@@ -91,9 +112,7 @@ async function getProgReq(user_name){
     $.get("/prog", {user:user_name}, function(aiText){
         aiText = aiText.split('\n');
         botSays(aiText);
-        //menustate = State.PROGREQ;
         botSays("Enter input to return to main menu...");
-        //progReqControlFlow();
         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
     });
 }
@@ -394,6 +413,12 @@ function onEnter(){
                 case State.PROGREQ:
                     progReqControlFlow();
                     break;
+                case State.CLUBS:
+                    userSays("clubs clubs clubs");
+                    break;
+                case State.CONTACT:
+                    contactInfoControlFlow();
+                    break;
                 default:
                     userSays("ahhhh");
             }
@@ -407,7 +432,7 @@ function writeMainMenu() {
         botSays("You are not logged in. Redirecting to login page...");
         window.location.pathname = "/";
     }
-    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
+    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile", "6) Clubs on Campus", "7) Important Contact Info"];
     botSays(opening);
 }
 // ------------------------------------ NAVIGATION CONTROL END ------------------------
