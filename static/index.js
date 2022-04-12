@@ -10,7 +10,7 @@ function sleep(ms) {
 }
 
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CLUBS:10 }
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CLUBS:10, CHANGESCHED: 11}
 var menustate = State.MAIN;
 
 
@@ -48,17 +48,19 @@ function controlFlow() {
             break;
         // handles the course prerequisite case
         case "2":
-            botText = "view course pre reqs menu  'WORK TODO";
-            botSays(botText);
+//            botText = "view course pre reqs menu  'WORK TODO";
+//            botSays(botText);
             menustate = State.PREREQ;
-            botSays(["Which course would you like to know about?","or type 0 to return to main menu"]);
+            botSays(["Which course would you like to know the prerequisites of?","or type 0 to return to main menu"]);
             break;
         // handles the building schedule case
         case "3":
-            botText = "build schedule menu  'WORK TODO";
-            botSays(botText);
+            $.get("/view-schedule", {user:username}, function(scheduleView){
+                botSays(scheduleView.split('\n'));
+                botSays("Choose a course to add or remove from your planner or type 0 to return to main menu");
+                DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
+            });
             menustate = State.SCHED;
-            botSays(["Input a course?", "or type 0 to return to main menu"]);
             break;
         // handles the course description case
         case "4":
@@ -85,7 +87,7 @@ function controlFlow() {
             break;
         // handles all other bad input
         default:
-            botText = "please enter a whole number between 0 and 5";
+            botText = "Please enter a number 0 through 7 to select a menu.";
             botSays(botText);
             writeMainMenu();
             break;
@@ -201,73 +203,105 @@ function profileControlFlow(course){
 // ----------------------------- USER PROFILE FUNCTIONS END -------------------------------------
 
 // ----------------------------- BUILD SCHEDULE FUNCTIONS START -------------------------------------
-function scheduleControlFlow(){
+function editSchedule(){
     var course = getUserText();
     userSays(course);
-    if ( course.length <= 7 ) {
-        switch(course)
-        {
+
+    switch(course) {
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
             default:
-                $.get("/course", { crs:course, type:"schedule", user:"cookie"}, function(aiText) {
-                    if (aiText == "bad input") {
-                        botSays("I didn't quite get that--");
-                        botSays(["Input a course?", "or type 0 to return to main menu"]);
+                $.get("/validate-course", {crs: course}, function(aiText) {
+                    if (aiText == "False") {
+                        botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                     else {
-                        menustate = State.COURSE;
-                        botSays(aiText);
+                        menustate = State.CHANGESCHED;
                         globalCourse = course;
-                        botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+                        botSays(["0) Choose a different course","1) Add course to planner","2) Remove course from planner"]);
                         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                 });
                 break;
-        }
-    }
-    else {
-    botSays("I didn't quite get that--");
-    botSays(["Input a course?", "or type 0 to return to main menu"]);
     }
 }
 
-
-function scheduleChoices(course){
+function scheduleControlFlow(course){
     var action = getUserText();
     userSays(action);
     switch(action)
     {
         case "0":
             menustate = State.SCHED;
-            botSays(["Input a course?", "or type 0 to return to main menu"]);
+            botSays("Choose a course to add to your planner or type 0 to return to main menu");
             break;
         case "1":
-            $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
+            $.get("/course-planner", {crs:globalCourse, operation:"add", user:username}, function(aiText){
                 botSays(aiText);
-                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+                $.get("/view-schedule", {user:username}, function(profileView){
+                    botSays(profileView.split('\n'));
+                    botSays("Choose a course or type 0 to return to main menu");
+                    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
+                });
             });
+            menustate = State.SCHED;
             break;
         case "2":
-            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+            $.get("/course-planner", {crs:globalCourse, operation:"remove", user:username}, function(aiText){
                 botSays(aiText);
-                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+                $.get("/view-schedule", {user:username}, function(profileView){
+                    botSays(profileView.split('\n'));
+                    botSays("Choose a course or type 0 to return to main menu");
+                    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
+                });
             });
-            break;
-        case "3":
-            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
-                botSays(aiText);
-                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
-            });
+            menustate = State.SCHED;
             break;
         default:
             botSays("I didn't quite get that--");
-            botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+            botSays(["0) Choose a different course","1) Add course to planner","2) Remove course from planner"]);
+            DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
             break;
     }
 }
+
+
+//function scheduleChoices(course){
+//    var action = getUserText();
+//    userSays(action);
+//    switch(action)
+//    {
+//        case "0":
+//            menustate = State.SCHED;
+//            botSays(["Input a course?", "or type 0 to return to main menu"]);
+//            break;
+//        case "1":
+//            $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
+//                botSays(aiText);
+//                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+//            });
+//            break;
+//        case "2":
+//            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
+//                botSays(aiText);
+//                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+//            });
+//            break;
+//        case "3":
+//            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
+//                botSays(aiText);
+//                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+//            });
+//            break;
+//        default:
+//            botSays("I didn't quite get that--");
+//            botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+//            break;
+//    }
+//}
 // ----------------------------- BUILD SCHEDULE FUNCTIONS END -------------------------------------
 
 // ------------------------------ COURSE DESCRIPTION FUNCTION START -------------------------------
@@ -299,31 +333,29 @@ function courseDescription() {
 // ------------------------------ COURSE DESCRIPTION FUNCTION END ---------------------------------
 
 // ----------------------------- COURSE ACTION FUNCTION START -------------------------------------
-function getCourse(category) {
+function getCoursePrereqs() {
     var course = getUserText();
     userSays(course);
-    if (course.length <= 7) {
-        switch(course){
+    switch(course) {
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
             default:
-                $.get("/course", { crs:course, type:category, user:"cookie"}, function(aiText) {
-                    if (aiText == "bad input") {
-                        botSays(["I didn't quite get that--","Which course would you like to know about?", "or type 0 to return to main menu"]);
+                $.get("/validate-course", {crs: course}, function(aiText) {
+                    if (aiText == "False") {
+                        botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
-                    else{
-                        botSays(aiText);
-                        botSays(["Would you like to know about another course?", "or type 0 to return to main menu" ]);
+                    else {
+                        $.get('/course-prereqs', {crs: course}, function(prereqs) {
+                            botSays([course + " has prerequisite(s):", prereqs]);
+                            botSays("Enter another course or type 0 to return to main menu");
+                            DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
+                        });
                     }
-
                 });
                 break;
-        }
-    }
-    else {
-        botSays(["I didn't quite get that--", "Which course would you like to know about?", "or type 0 to return to main menu" ]);
     }
 }
 
@@ -393,10 +425,10 @@ function onEnter(){
                     controlFlow();
                     break;
                 case State.PREREQ:
-                    getCourse("prereqs");
+                    getCoursePrereqs();
                     break;
                 case State.SCHED:
-                    scheduleControlFlow();
+                    editSchedule();
                     break;
                 case State.COURSE:
                     scheduleChoices(globalCourse);
@@ -409,6 +441,9 @@ function onEnter(){
                     break;
                 case State.CHANGEPROF:
                     profileControlFlow(globalCourse);
+                    break;
+                case State.CHANGESCHED:
+                    scheduleControlFlow(globalCourse);
                     break;
                 case State.PROGREQ:
                     progReqControlFlow();
