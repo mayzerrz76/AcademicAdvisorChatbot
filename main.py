@@ -11,6 +11,12 @@ def home():
     # allow for interacting with chatbot page
     return render_template("login.html")
 
+# loads the new user page
+@app.route("/newUser")
+def new_user():
+
+    return render_template("newuser.html")
+
 # loads the chatbot page
 @app.route("/chatbot")
 def landing_page():

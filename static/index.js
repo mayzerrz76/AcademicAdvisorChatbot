@@ -10,7 +10,7 @@ function sleep(ms) {
 }
 
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8 }
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CLUBS:10 }
 var menustate = State.MAIN;
 
 
@@ -70,8 +70,18 @@ function controlFlow() {
             $.get("/view-profile", {user:username}, function(profileView){
                 botSays(profileView.split('\n'));
                 botSays("Choose a course to add or remove from courses taken or type 0 to return to main menu");
+                DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
             });
             menustate = State.PROF;
+            break;
+        case "6":
+            botSays("Clubs submenu for Arpit?");
+            writeMainMenu();
+            break;
+        case "7":
+            botSays(["List of important contact info", "DPS (###)-###-####", "SUICIDE HOTLINE (###)-###-####", "SEXUAL ASSAULT HOTLINE (###)-###-####", "Arpit's iPhone (###)-###-####"]);
+            botSays("Enter input to return to main menu...");
+            menustate = State.CONTACT;
             break;
         // handles all other bad input
         default:
@@ -83,6 +93,18 @@ function controlFlow() {
 }
 // --------------------------------- MAIN MENU END ----------------------------------
 
+// --------------------------------CONTACT INFO FUNCTION START----------
+
+
+
+// --------------------------------CONTACT INFO FUNCTION END------------
+function contactInfoControlFlow(){
+    userInput = getUserText();
+    userSays(userInput);
+    writeMainMenu();
+    menustate = State.MAIN;
+}
+
 // ---------------------------------PROGRAM REQUIREMENTS FUNCTIONS START----------------------------------
 
 // SHOULD output the users program requirements (specific to user?)
@@ -90,9 +112,8 @@ async function getProgReq(user_name){
     $.get("/prog", {user:user_name}, function(aiText){
         aiText = aiText.split('\n');
         botSays(aiText);
-        //menustate = State.PROGREQ;
         botSays("Enter input to return to main menu...");
-        //progReqControlFlow();
+        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
     });
 }
 
@@ -124,11 +145,13 @@ function editProfile(){
                 $.get("/validate-course", {crs: course}, function(aiText) {
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                     else {
                         menustate = State.CHANGEPROF;
                         globalCourse = course;
                         botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                 });
                 break;
@@ -152,6 +175,7 @@ function profileControlFlow(course){
                 $.get("/view-profile", {user:username}, function(profileView){
                     botSays(profileView.split('\n'));
                     botSays("Choose a course or type 0 to return to main menu");
+                    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                 });
             });
             menustate = State.PROF;
@@ -162,6 +186,7 @@ function profileControlFlow(course){
                 $.get("/view-profile", {user:username}, function(profileView){
                     botSays(profileView.split('\n'));
                     botSays("Choose a course or type 0 to return to main menu");
+                    DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                 });
             });
             menustate = State.PROF;
@@ -169,6 +194,7 @@ function profileControlFlow(course){
         default:
             botSays("I didn't quite get that--");
             botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
+            DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
             break;
     }
 }
@@ -196,6 +222,7 @@ function scheduleControlFlow(){
                         botSays(aiText);
                         globalCourse = course;
                         botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                 });
                 break;
@@ -256,11 +283,13 @@ function courseDescription() {
                 $.get("/validate-course", {crs: course}, function(aiText) {
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
+                        DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                     else {
                         $.get('/course-description', {crs: course}, function(description) {
                             botSays([course + ":", description]);
                             botSays("Enter another course or type 0 to return to main menu");
+                            DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                         });
                     }
                 });
@@ -384,6 +413,12 @@ function onEnter(){
                 case State.PROGREQ:
                     progReqControlFlow();
                     break;
+                case State.CLUBS:
+                    userSays("clubs clubs clubs");
+                    break;
+                case State.CONTACT:
+                    contactInfoControlFlow();
+                    break;
                 default:
                     userSays("ahhhh");
             }
@@ -397,7 +432,7 @@ function writeMainMenu() {
         botSays("You are not logged in. Redirecting to login page...");
         window.location.pathname = "/";
     }
-    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile"];
+    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile", "6) Clubs on Campus", "7) Important Contact Info"];
     botSays(opening);
 }
 // ------------------------------------ NAVIGATION CONTROL END ------------------------
