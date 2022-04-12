@@ -10,26 +10,35 @@
     <link rel="shortcut icon" href="../static/favicon.ico">
 </head>
 <body>
-<div><img id="headerPic" src="../static/suCampus.jpeg" alt="Flowers in Chania"></div>
-<h1>SU Academic Advisor Bot </h1>
-
+<div><img id="headerPic" src="../static/suCampus.jpeg" alt="Syracuse Campus photo"></div>
+<div id="loginBox">
+<h1>SU Academic Advisor Bot ®</h1>
+<div id="logSection">
 <h2> Please Enter Login: </h2>
 
     <div class ="loginPage">
         <div class="loginForms">
-        <label for="userName">UserName:</label>
+        <label for="userName" id="userNameLabel">Username:</label>
 
-    <input type="text" id="userName" minlength="4" maxlength="14">
+    <input type="text" id="userName" minlength="4" maxlength="14" placeholder="Username...">
         <label for="userPswd" id="passLbl">Password:</label>
 
-    <input type="password" id="userPswd" minlength="6" maxlength="12">
-    <button onclick="checkPassword()" id="butLogin"> Login </button>
-    <button onclick="newAccount()" id="butAccount">Create New Account</button>
-    </div>
-        <p id="demo"></p>
+    <input type="password" id="userPswd" minlength="6" maxlength="12" placeholder="Password...">
+    <button onclick="checkPassword()" id="butLogin"> Login </button><p id="demo"></p></div></div></div>
+
+    <h2 id="createActDesc">OR Create New Account Here...</h2>
+    <button onclick="newAccount()" id="butAccount">Sign-Up</button>
+
+
 
         <script src="../static/login.js"></script>
     </div>
+
+<footer>
+    <p id="author">Website Designed By: Ryan May, Anthony Mazzacane, & Michael Perry</p>
+    <p id="email">Email me: <a href="mailto:rmay03@syr.edu?subject=SU Advisor Bot">rmay03@syr.edu</a></p>
+    <p id="date">Last Updated: 04/13/2022</p>
+</footer>
 
 </body>
 </html>

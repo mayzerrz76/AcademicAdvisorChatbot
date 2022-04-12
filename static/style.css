@@ -1,22 +1,33 @@
 body {
     font-family: Cambria;
-    background-color:Navy;
+        background-image: -webkit-linear-gradient(0deg,
+            #C2530B 0%, white 50%, #C2530B 100%);
+
+    margin: 0 auto;
+
 }
+
 
 h1 {
     color: #C2530B;
     margin-bottom: 0;
     margin-top: 0;
     text-align: center;
-    font-size: 40px;
+    font-size: 60px;
+    background-color: white;
+    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    border-top-right-radius: 25px;
+    border-top-left-radius: 25px;
+    border-bottom:5px solid #C2530B;
 }
 
 h2{
     color: #C2530B;
+    text-shadow: 0 2px 5px black;
     margin-bottom: 20px;
     padding-top: 10px;
     text-align: center;
-    font-size: 28px;
+    font-size: 45px;
 }
 
 
@@ -26,10 +37,37 @@ h3 {
     margin-top: 3px;
     text-align: center;
 }
-#butLogin{
-    margin-top:20px;
-    width: 15%;
+
+#createActDesc{
+    margin-top: 2.5em;
 }
+#butLogin{
+    margin-top:40px;
+    font-weight:bold;
+    font-size: 20px;
+    color: white;
+    background-color: #C2530B;
+    width: 40%;
+    height: 35px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.75) 0px 14px 15px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#butLogin:hover {
+    background-color: white;
+    color: navy;
+}
+ #butLogin:active{
+     background-color: #C2530B;
+     color: navy;
+ }
+/*#nav_menu ul li a:active {
+    background-color: gray;
+}
+#nav_menu ul li a.current {
+    color: yellow !important;
+    background: navy;
+    text-shadow: none;
+}*/
 
 #headerPic{
   display: block;
@@ -37,13 +75,40 @@ h3 {
   margin-right: auto;
   width: 80%;
   max-height: 200px;
-  border-left: 5px solid #C2530B;
-  border-right: 5px solid #C2530B;
-  border-bottom: 5px solid #C2530B;
+  border-left: 5px solid navy;
+  border-right: 5px solid navy;
+  border-bottom: 5px solid navy;
   border-bottom-left-radius: 25px;
   border-bottom-right-radius: 25px;
+  box-shadow: rgba(0, 0, 0, 0.75) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+
 
 }
+
+#loginBox{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 6em;
+    background-color: navy;
+    width: 50%;
+    height: 600px;
+    border-radius: 25px;
+    box-shadow: rgba(0, 0, 0, 0.75) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+    background-image: -webkit-linear-gradient(45deg,navy  25%,  steelblue 50%,navy  75%);
+    margin-bottom: 200px;
+    min-width: 900px;
+    border-bottom: 5px solid #C2530B;
+    border-left: 5px solid #C2530B;
+    border-right: 5px solid #C2530B;
+
+}
+.logoPic {
+    display: inline-block;
+
+    width: 9%;
+}
+
 
 p {
     color: white;
@@ -62,18 +127,81 @@ p {
     text-align:center;
     display: grid;
     place-items: center;
-    color:orange;
+    color:#C2530B;
+}
+
+footer{
+    width: 80%;
+    clear:both;
+    margin-left: 10%;
+    background-image: -webkit-linear-gradient(30deg,
+        navy 0%, steelblue 50%, navy 100%);
+    color: #ff9966;
+    font-size: 100%;
+    text-shadow: 1px 1px black;
+    border-radius: 1em;
+    padding-bottom: 1px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+footer a:link, footer a:visited {
+    color: orangered;
+    font-weight: bold;
+}
+#email{
+    float: left;
+
+}
+
+#author{
+    position: relative;
+    float: left;
+    padding: 0 15em 0 1em;
+}
+
+#date{
+    float:right;
+    padding-right: 10px;
+}
+
+footer::after {
+     content: "";
+     clear: both;
+     display: block;
+}
+
+#logSection{
+    float: left;
+    padding-left 55px;
+    width: 60%;
+    border-right: 5px solid #C2530B;
+    height: 88%;
 }
 #passLbl{
+    font-weight: bold;
     padding-top: 20px;
+    font-size: 40px;
+    text-shadow: 0 2px 5px black;
+}
+
+#userNameLabel {
+    font-weight: bold;
+    font-size: 40px;
+    text-shadow:  0 2px 5px black;
 }
 
 #userPswd{
-    width:15%;
+font-size: 28px;
+    width:40%;
+    height: 30px;
+    border-radius: 10px;
 }
 
 #userName{
-    width:15%;
+font-size: 28px;
+    width:40%;
+    height: 30px;
+    border-radius: 10px;
 }
 
 #chatbox {
@@ -111,6 +239,27 @@ p {
     font-family: monospace;
     font-size: 17px;
 }
+
+#butAccount{
+    margin-left: 5em;
+    margin-top:40px;
+    font-weight:bold;
+    font-size: 20px;
+    color: white;
+    background-color: #C2530B;
+    width: 20%;
+    height: 35px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.75) 0px 14px 15px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#butAccount:hover {
+    background-color: white;
+    color: navy;
+}
+ #butAccount:active{
+     background-color: #C2530B;
+     color: navy;
+ }
 
 
 .userText {
