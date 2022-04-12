@@ -15,12 +15,23 @@ h1 {
     text-align: center;
     font-size: 60px;
     background-color: white;
-    text-shadow: 4px 4px 0px rgba(0,0,0,0.3);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.85);
     border-top-right-radius: 25px;
     border-top-left-radius: 25px;
     border-bottom:5px solid #C2530B;
 }
 
+#titleIndex{
+        color: #C2530B;
+        margin-bottom: 0;
+        margin-top: 0;
+        text-align: center;
+        font-size: 60px;
+        background-color: white;
+        text-shadow: 2px 2px 4px rgba(0,0,0,0.85);
+
+        border-bottom:5px solid #C2530B;
+}
 h2{
     color: #C2530B;
     text-shadow: 0 2px 5px black;
@@ -205,7 +216,7 @@ font-size: 28px;
 }
 
 #chatbox {
-    border: 5px solid #C2530B;
+    border: .5px solid navy;
     height: 650px;
     overflow: scroll;
     border-radius: 25px;
@@ -214,6 +225,8 @@ font-size: 28px;
     margin-right: auto;
     width: 50%;
     margin-top: 20px;
+        box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 12px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/
+                                                          inset 0 6px 6px rgba(255,255,255,0.8); /*top internal highlight*/
 }
 
 #userInput{
@@ -221,14 +234,19 @@ font-size: 28px;
     margin-right: auto;
     width: 40%;
     margin-top: 60px;
+    margin-bottom: 60px;
+
 }
 
+
 #textInput {
-    width: 87%;
+    width: 100%;
+    height: 1.5em;
     border: none;
     border-bottom: 2px solid navy;
     font-family: monospace;
     font-size: 17px;
+    border-radius:7px;
 }
 
 #demo {
@@ -265,27 +283,29 @@ font-size: 28px;
 .userText {
     margin-right: 15px;
     margin-left: auto;
-    border: 5px solid navy;
+    border: .25px solid #C2530B;
     border-radius: 15px;
     background-color: #C2530B;
     min-width:10%;
     color: white;
     font-family: monospace;
-    font-size: 17px;
+    font-size: 18px;
+    font-weight: bold;
     text-align: right;
     padding-right: 5px;
-    padding-left: 5px;
+    padding-left: 10px;
     line-height: 40px;
+    text-shadow: 1px 2px 2px black;
+
+    box-shadow: rgba(0, 0, 0, 0.75) 10px 21px 18px, inset 0 -4px 4px rgba(0,0,0,0.5), /*bottom internal shadow*/
+                                                          inset 0 4px 4px rgba(255,255,255,0.8); /*top internal highlight*/
     float: right;
     clear:both;
 }
 
 .userText span {
-    border-radius: 15px;
-    font-weight: bold;
-    background-color: #C2530B;
     padding: 10px;
-    border-radius: 2px;
+
 }
 
 .sb2:after {
@@ -294,10 +314,10 @@ font-size: 28px;
   width: 0px;
   height: 0px;
   border-left: 10px solid transparent;
-  border-right: 0px solid navy;
-  border-top: 10px solid navy;
+  border-right: 0px solid #C2530B;
+  border-top: 20px solid #C2530B;
   border-bottom: 10px solid transparent;
-  left: 3px;
+  left: -3px;
   bottom: -43px;
 
 }
@@ -307,23 +327,29 @@ font-size: 28px;
     color: white;
     font-weight: bold;
     font-family: monospace;
-    font-size: 17px;
+    font-size: 18px;
     text-align: left;
     margin-left: 6px;
-    line-height: 40px;
+    line-height: 25px;
+    text-shadow: 3px 4px 7px black;
+
+
 }
 
 .botMsg {
     clear:both;
     margin-top: 15px;
     margin-bottom: 10px;
-    border: 5px solid #C2530B;
-    background-color:navy;
+
+    border: .5px solid navy;
+    background-image: -webkit-linear-gradient(45deg,navy  25%,  steelblue 50%,navy  75%);
     min-width: 50%;
     max-width: 85%;
     border-radius: 10px;
     position: relative;
     margin-left:10px;
+    box-shadow: rgba(0, 0, 0, 0.75) 10px 21px 18px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/
+                                                      inset 0 6px 6px rgba(255,255,255,0.8); /*top internal highlight*/
 }
 
 .sb1:after {
@@ -331,9 +357,9 @@ font-size: 28px;
   width: 0px;
   height: 0px;
   position: absolute;
-  border-left: 10px solid #C2530B;
+  border-left: 10px solid navy;
   border-right: 10px solid transparent;
-  border-top: 10px solid #C2530B;
+  border-top: 10px solid navy;
   border-bottom: 10px solid transparent;
   left: 8px;
   bottom: -20px;
