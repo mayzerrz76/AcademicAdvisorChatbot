@@ -340,6 +340,30 @@ font-size: 28px;
      color: navy;
  }
 
+#butCreateAccount{
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+    margin-top:40px;
+    font-weight:bold;
+    font-size: 20px;
+    color: white;
+    background-color: #C2530B;
+    width: 40%;
+    height: 35px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.75) 0px 14px 15px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+#butCreateAccount:hover {
+    background-color: white;
+    color: navy;
+}
+ #butCreateAccount:active{
+     background-color: #C2530B;
+     color: navy;
+ }
 
 .userText {
     margin-right: 15px;
