@@ -10,7 +10,7 @@ function sleep(ms) {
 }
 
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CLUBS:10, CHANGESCHED: 11}
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CHANGESCHED:11}
 var menustate = State.MAIN;
 
 
@@ -77,11 +77,7 @@ function controlFlow() {
             menustate = State.PROF;
             break;
         case "6":
-            botSays("Clubs submenu for Arpit?");
-            writeMainMenu();
-            break;
-        case "7":
-            botSays(["List of important contact info", "DPS (###)-###-####", "SUICIDE HOTLINE (###)-###-####", "SEXUAL ASSAULT HOTLINE (###)-###-####", "Arpit's iPhone (###)-###-####"]);
+            botSays(["List of important contact info", "DPS (315)-443-2224", "SUICIDE HOTLINE (800)-273-8255", "SEXUAL ASSAULT HOTLINE (315)-443-8000", "SU COVID OFFICE (315)-443-6180", "BARNES CENTER (315)-443-8000", "FINANCIAL SUPPORT (315)-443-1513", "DISABILITY RESOURCES (315)-443-4498", "MOHAN (315)-443-2322", "INFORMATION TECHNOLOGY (315)-443-4498", "INTERNATIONAL SERVICES (315)-443-2457"]);
             botSays("Enter input to return to main menu...");
             menustate = State.CONTACT;
             break;
@@ -97,15 +93,14 @@ function controlFlow() {
 
 // --------------------------------CONTACT INFO FUNCTION START----------
 
-
-
-// --------------------------------CONTACT INFO FUNCTION END------------
 function contactInfoControlFlow(){
     userInput = getUserText();
     userSays(userInput);
     writeMainMenu();
     menustate = State.MAIN;
 }
+// --------------------------------CONTACT INFO FUNCTION END------------
+
 
 // ---------------------------------PROGRAM REQUIREMENTS FUNCTIONS START----------------------------------
 
@@ -267,41 +262,6 @@ function scheduleControlFlow(course){
             break;
     }
 }
-
-
-//function scheduleChoices(course){
-//    var action = getUserText();
-//    userSays(action);
-//    switch(action)
-//    {
-//        case "0":
-//            menustate = State.SCHED;
-//            botSays(["Input a course?", "or type 0 to return to main menu"]);
-//            break;
-//        case "1":
-//            $.get("/schedule", {crs:course, type:"query", user:"cookie"}, function(aiText){
-//                botSays(aiText);
-//                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
-//            });
-//            break;
-//        case "2":
-//            $.get("/schedule", {crs:course, type:"add", user:"cookie"}, function(aiText){
-//                botSays(aiText);
-//                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
-//            });
-//            break;
-//        case "3":
-//            $.get("/schedule", {crs:course, type:"remove", user:"cookie"}, function(aiText){
-//                botSays(aiText);
-//                botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
-//            });
-//            break;
-//        default:
-//            botSays("I didn't quite get that--");
-//            botSays(["0) choose a different course", "1) get course time", "2) add course to schedule", "3) remove course from schedule"]);
-//            break;
-//    }
-//}
 // ----------------------------- BUILD SCHEDULE FUNCTIONS END -------------------------------------
 
 // ------------------------------ COURSE DESCRIPTION FUNCTION START -------------------------------
@@ -448,9 +408,6 @@ function onEnter(){
                 case State.PROGREQ:
                     progReqControlFlow();
                     break;
-                case State.CLUBS:
-                    userSays("clubs clubs clubs");
-                    break;
                 case State.CONTACT:
                     contactInfoControlFlow();
                     break;
@@ -467,7 +424,7 @@ function writeMainMenu() {
         botSays("You are not logged in. Redirecting to login page...");
         window.location.pathname = "/";
     }
-    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile", "6) Clubs on Campus", "7) Important Contact Info"];
+    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile", "6) Important Contact Info"];
     botSays(opening);
 }
 // ------------------------------------ NAVIGATION CONTROL END ------------------------
