@@ -120,6 +120,21 @@ h3 {
     width: 9%;
 }
 
+#acctBox{
+        display:block;
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 6em;
+        background-color: navy;
+        width: 50%;
+        height: 600px;
+        border-radius: 25px;
+        box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 12px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/
+                                                                  inset 0 6px 6px rgba(255,255,255,0.5); /*top internal highlight*/
+        background-image: -webkit-linear-gradient(45deg,navy  25%,  steelblue 50%,navy  75%);
+        margin-bottom: 200px;
+        min-width: 900px;
+}
 
 p {
     color: white;
@@ -154,6 +169,7 @@ footer{
     padding-bottom: 1px;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
+    margin-top: 200px;
 }
 footer a:link, footer a:visited {
     color: orangered;
@@ -194,10 +210,54 @@ footer::after {
     font-size: 40px;
     text-shadow: 0 2px 5px black;
 }
+#userPswdConfirm{
+    font-size: 28px;
+    width:40%;
+    height: 30px;
+    border-radius: 10px;
+}
 
+#userProgram{
+    font-size: 28px;
+    width:40%;
+    height: 30px;
+    border-radius: 10px;
+}
+
+#coursesTaken{
+    font-size: 28px;
+    width:40%;
+    height: 30px;
+    border-radius: 10px;
+}
 #userNameLabel {
     font-weight: bold;
     font-size: 40px;
+    text-shadow:  0 2px 5px black;
+}
+#pass2Lbl {
+    font-weight: bold;
+    font-size: 30px;
+    text-shadow:  0 2px 5px black;
+}
+#userName2Label {
+    font-weight: bold;
+    font-size: 30px;
+    text-shadow:  0 2px 5px black;
+}
+#pswdConfirmLbl {
+    font-weight: bold;
+    font-size: 30px;
+    text-shadow:  0 2px 5px black;
+}
+#progLbl {
+    font-weight: bold;
+    font-size: 30px;
+    text-shadow:  0 2px 5px black;
+}
+#courselabel {
+    font-weight: bold;
+    font-size: 30px;
     text-shadow:  0 2px 5px black;
 }
 
@@ -209,7 +269,7 @@ font-size: 28px;
 }
 
 #userName{
-font-size: 28px;
+    font-size: 28px;
     width:40%;
     height: 30px;
     border-radius: 10px;
@@ -225,12 +285,13 @@ font-size: 28px;
     margin-right: auto;
     width: 50%;
     margin-top: 20px;
-        box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 12px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/
+    box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 12px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/
                                                           inset 0 6px 6px rgba(255,255,255,0.8); /*top internal highlight*/
 }
 
 #userInput{
     margin-left: auto;
+    margin-right: auto;
     margin-right: auto;
     width: 40%;
     margin-top: 60px;

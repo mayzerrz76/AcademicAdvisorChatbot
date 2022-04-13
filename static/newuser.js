@@ -4,6 +4,10 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
+function returnToLogin() {
+    window.location.pathname = "/";
+}
+
 function createUser() {
     var username = document.getElementById("userName").value;
     var password = document.getElementById("userPswd").value;
