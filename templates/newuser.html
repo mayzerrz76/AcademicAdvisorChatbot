@@ -12,6 +12,7 @@
 
 <h1>Create User Account</h1>
 
+<div id="acctBox">
 <h2> Please Enter Account Information </h2>
 
 <!-- can definitely be changed if need be -->
@@ -20,22 +21,22 @@
     <div class="loginForms">
 
         <!-- check to make sure username isn't already taken -->
-        <label for="userName">*UserName:</label>
+        <label for="userName" id="userName2Label">*UserName:</label>
         <input type="text" id="userName" minlength="4" maxlength="14">
 
         <!-- check for a match 1/2 -->
-        <label for="userPswd" id="passLbl">*Password:</label>
+        <label for="userPswd" id="pass2Lbl" >*Password:</label>
         <input type="password" id="userPswd" minlength="6" maxlength="12">
 
         <!-- check for a match 2/2-->
-        <label for="userPswdConfirm" id="passLbl">*Confirm Password:</label>
+        <label for="userPswdConfirm" id="pswdConfirmLbl">*Confirm Password:</label>
         <input type="password" id="userPswdConfirm" minlength="6" maxlength="12">
 
         <label for="userProgram" id="progLbl">*Program:</label>
-        <input type="text" id="userProgram" minlength="6" maxlength="40">
+        <input type="text"  id="userProgram" minlength="6" maxlength="40">
 
         <!-- anything garbage here will just do nothing, only enter actual courses into the user course object -->
-        <label for="coursesTaken" id="courselabel">Enter the courses you've taken, separated by commas</label>
+        <label for="coursesTaken" id="courselabel">Enter the courses you've taken,<br> separated by commas</label>
         <input type="text" id="coursesTaken">
 
         <button onclick="createUser()" id="butAccount"> Finish Creating Account </button>
@@ -44,7 +45,7 @@
 
         </div>
 
-        <p id="demo"></p>
+        <p id="demo"></p></div>
 
         <script src="../static/newuser.js" ></script>
     </div>
