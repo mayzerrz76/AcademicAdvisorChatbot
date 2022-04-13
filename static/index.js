@@ -138,6 +138,9 @@ function editProfile(){
     var course = getUserText();
     userSays(course);
 
+    // Make user input case insensitive
+    course = course.toUpperCase();
+
     switch(course) {
             // return to main menu
             case "0":
@@ -217,6 +220,9 @@ function editSchedule(){
     var course = getUserText();
     userSays(course);
 
+    // Make user input case insensitive
+    course = course.toUpperCase();
+
     switch(course) {
             // return to main menu page
             case "0":
@@ -292,6 +298,10 @@ function scheduleControlFlow(course){
 function courseDescription() {
     var course = getUserText();
     userSays(course);
+
+    // Make user input case insensitive
+    course = course.toUpperCase();
+
     switch(course) {
             // return to main menu
             case "0":
@@ -325,6 +335,10 @@ function courseDescription() {
 function getCoursePrereqs() {
     var course = getUserText();
     userSays(course);
+
+    // Make user input case insensitive
+    course = course.toUpperCase();
+
     switch(course) {
             // return to main menu
             case "0":
