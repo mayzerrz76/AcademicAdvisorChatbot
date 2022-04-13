@@ -93,6 +93,7 @@ function controlFlow() {
 
 // --------------------------------CONTACT INFO FUNCTION START----------
 
+// waits for user input before returning to main menu
 function contactInfoControlFlow(){
     userInput = getUserText();
     userSays(userInput);
@@ -104,7 +105,7 @@ function contactInfoControlFlow(){
 
 // ---------------------------------PROGRAM REQUIREMENTS FUNCTIONS START----------------------------------
 
-// SHOULD output the users program requirements (specific to user?)
+// retrieves program requirements
 async function getProgReq(user_name){
     $.get("/prog", {user:user_name}, function(aiText){
         aiText = aiText.split('\n');
@@ -114,10 +115,12 @@ async function getProgReq(user_name){
     });
 }
 
+// waiting function
 async function printWait(howLong){
     await sleep(howLong);
 }
 
+// waits for user input before returning to main menu
 function progReqControlFlow(){
     userInput = getUserText();
     userSays(userInput);
@@ -129,21 +132,27 @@ function progReqControlFlow(){
 // ----------------------------- PROGRAM REQUIREMENTS FUNCTIONS END -------------------------------------
 
 // ----------------------------- USER PROFILE FUNCTIONS START -------------------------------------
+
+// profile submenu control flow
 function editProfile(){
     var course = getUserText();
     userSays(course);
 
     switch(course) {
+            // return to main menu
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
+            // attempt to get course
             default:
                 $.get("/validate-course", {crs: course}, function(aiText) {
+                    // error if non valid course name is given
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
+                    // navigation to new submenu when course exists
                     else {
                         menustate = State.CHANGEPROF;
                         globalCourse = course;
@@ -162,10 +171,12 @@ function profileControlFlow(course){
     userSays(action);
     switch(action)
     {
+        // return to user profile main submenu
         case "0":
             menustate = State.PROF;
-            botSays("Choose a course to add to your course taken or type 0 to return to main menu");
+            botSays("Choose a course to add or remove from course taken or type 0 to return to main menu");
             break;
+        // adds course to lists of courses
         case "1":
             $.get("/course-taken", {crs:globalCourse, operation:"add", user:username}, function(aiText){
                 botSays(aiText);
@@ -177,6 +188,7 @@ function profileControlFlow(course){
             });
             menustate = State.PROF;
             break;
+        // removes course from lists of courses
         case "2":
             $.get("/course-taken", {crs:globalCourse, operation:"remove", user:username}, function(aiText){
                 botSays(aiText);
@@ -188,9 +200,10 @@ function profileControlFlow(course){
             });
             menustate = State.PROF;
             break;
+        // error messages for random input
         default:
             botSays("I didn't quite get that--");
-            botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
+            botSays(["0) Choose a different course","1) Add course to courses taken","2) Remove course from courses taken"]);
             DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
             break;
     }
@@ -198,16 +211,20 @@ function profileControlFlow(course){
 // ----------------------------- USER PROFILE FUNCTIONS END -------------------------------------
 
 // ----------------------------- BUILD SCHEDULE FUNCTIONS START -------------------------------------
+
+// accept user input of a course
 function editSchedule(){
     var course = getUserText();
     userSays(course);
 
     switch(course) {
+            // return to main menu page
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
             default:
+                // given a invalid course
                 $.get("/validate-course", {crs: course}, function(aiText) {
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
@@ -424,7 +441,7 @@ function writeMainMenu() {
         botSays("You are not logged in. Redirecting to login page...");
         window.location.pathname = "/";
     }
-    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Schedule","4) View Class Description","5) View My Profile", "6) Important Contact Info"];
+    var opening = ["HOW CAN I HELP YOU?","-------------------","0) Logout","1) List Program Reqs.","2) View Course Pre-Reqs.","3) Build Planner","4) View Class Description","5) View My Profile", "6) Important Contact Info"];
     botSays(opening);
 }
 // ------------------------------------ NAVIGATION CONTROL END ------------------------
