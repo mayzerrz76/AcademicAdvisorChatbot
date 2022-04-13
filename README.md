@@ -17,15 +17,46 @@ Enjoy.
 FILE NAVIGATION
 ---
 
-    chatbot
+    dir chatbot :
 
         dbobjects.py : contains database object constructors
             
-    static
+    dir static :
         
         favicon.ico : icon for tab when opening in browser
 
-        index.js : contains the main javascript file for 
-            front end logical flow and user 
+        index.js : The main code for front-end 
+            logical flow based on user input
 
+        login.js : Front-end login procedures
+
+        newuser.js : Front-end creating account procedures
+
+        normalize.css : Allows for uniform display across 
+            browser selection
+
+        style.css : Standard webpage styling
+
+        suCampus.jpeg : Image used on the login page
+
+    dir templates :
         
+        index.html : Webpage for the main chat bot 
+
+        login.html : Webpage for the login procedure
+
+        newuser.html : Webpage for new user procedure
+
+    .gitignore : The gitignore we all know and love
+
+    main.py : Backend code which ties it all together, 
+        supported by the flask framework
+
+    README.md : The file you're reading (hi there!)
+
+    test.py : reminants of old testing procedures and
+        descriptions of what ux/ui tests were ran on 
+        the software
+
+---
+
