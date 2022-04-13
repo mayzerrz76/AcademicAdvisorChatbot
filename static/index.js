@@ -83,7 +83,7 @@ function controlFlow() {
             break;
         // handles all other bad input
         default:
-            botText = "Please enter a number 0 through 7 to select a menu.";
+            botText = "Please enter a number 0 through 6 to select a menu.";
             botSays(botText);
             writeMainMenu();
             break;
