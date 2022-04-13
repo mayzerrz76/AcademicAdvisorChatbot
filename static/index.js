@@ -224,12 +224,13 @@ function editSchedule(){
                 writeMainMenu();
                 break;
             default:
-                // given a invalid course
                 $.get("/validate-course", {crs: course}, function(aiText) {
+                    // given a invalid course
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
+                    // given a valid course
                     else {
                         menustate = State.CHANGESCHED;
                         globalCourse = course;
@@ -240,16 +241,18 @@ function editSchedule(){
                 break;
     }
 }
-
+// fucntion for adding or removing from planner
 function scheduleControlFlow(course){
     var action = getUserText();
     userSays(action);
     switch(action)
     {
+        // return to schedule main menu
         case "0":
             menustate = State.SCHED;
             botSays("Choose a course to add to your planner or type 0 to return to main menu");
             break;
+        // allow for users to add courses
         case "1":
             $.get("/course-planner", {crs:globalCourse, operation:"add", user:username}, function(aiText){
                 botSays(aiText);
@@ -261,6 +264,7 @@ function scheduleControlFlow(course){
             });
             menustate = State.SCHED;
             break;
+        // allow for users to remove courses
         case "2":
             $.get("/course-planner", {crs:globalCourse, operation:"remove", user:username}, function(aiText){
                 botSays(aiText);
@@ -272,6 +276,7 @@ function scheduleControlFlow(course){
             });
             menustate = State.SCHED;
             break;
+        // random input handler
         default:
             botSays("I didn't quite get that--");
             botSays(["0) Choose a different course","1) Add course to planner","2) Remove course from planner"]);
@@ -282,20 +287,25 @@ function scheduleControlFlow(course){
 // ----------------------------- BUILD SCHEDULE FUNCTIONS END -------------------------------------
 
 // ------------------------------ COURSE DESCRIPTION FUNCTION START -------------------------------
+
+// lets the user input a course to get course description
 function courseDescription() {
     var course = getUserText();
     userSays(course);
     switch(course) {
+            // return to main menu
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
             default:
                 $.get("/validate-course", {crs: course}, function(aiText) {
+                    // invalid course entry handler
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
+                    // valid course entry handler
                     else {
                         $.get('/course-description', {crs: course}, function(description) {
                             botSays([course + ":", description]);
@@ -310,20 +320,25 @@ function courseDescription() {
 // ------------------------------ COURSE DESCRIPTION FUNCTION END ---------------------------------
 
 // ----------------------------- COURSE ACTION FUNCTION START -------------------------------------
+
+// prompts user for course to get prereqs for
 function getCoursePrereqs() {
     var course = getUserText();
     userSays(course);
     switch(course) {
+            // return to main menu
             case "0":
                 menustate = State.MAIN;
                 writeMainMenu();
                 break;
             default:
                 $.get("/validate-course", {crs: course}, function(aiText) {
+                    // invalid course handler
                     if (aiText == "False") {
                         botSays(["I didn't quite get that--","Choose a course or type 0 to return to main menu"]);
                         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
+                    // valid course handler, prints pre-reqs
                     else {
                         $.get('/course-prereqs', {crs: course}, function(prereqs) {
                             botSays([course + " has prerequisite(s):", prereqs]);
@@ -450,9 +465,8 @@ function writeMainMenu() {
 function returnToLogin() {
     botText = "Logging out...";
     botSays(botText);
-    sleep(500);
     menustate = State.LOGOUT;
-    document.cookie = "username=;expires=-1";
+    document.cookie = "username=;Max-Age=-1;";
     window.location.pathname = "/";
 }
 // -------------------------- RETURN TO LOGIN PAGE FUNCTION -----------------------//
