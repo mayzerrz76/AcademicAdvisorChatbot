@@ -1,9 +1,32 @@
 import chatbot.dbobjects as db
 
-# Course testing
+"""
+TESTING PROCEDURES
+
+-- LOGIN PROCEDURES --
+
+Input: Attempt random character to username and password boxes
+Output: User prompted with "incorrect username or password" message
+
+Input: Correct username (user guy), incorrect password 
+Output: User prompted with "incorrect username or password" message
+
+Input: Correct username (user guy), password from DIFFERENT user account 
+Output: User prompted with "incorrect username or password" message
+
+Input: Repeated spamming of enter button
+Output: User prompted with "incorrect username or password" message
+
+Input: 
+
+
+
+"""
+
+## OLD TESTING SOFTWARE USED TO CREATE ACCOUNTS AND COURSES
 
 # db.Course.COURSES.delete_many({'course_id': '12345'})
-
+"""
 courseA = db.Course(course_id='12345',
                     subject_code='TST',
                     course_num='123',
@@ -21,6 +44,7 @@ courseA = db.Course(course_id='12345',
                     )
 print(courseA.course_id)
 print(courseA.course_num)
+"""
 
 # reconstructed_courseA = db.Course.from_mongo('12345')
 # print(reconstructed_courseA.credits)

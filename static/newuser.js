@@ -4,6 +4,10 @@ script.src = 'https://code.jquery.com/jquery-3.4.1.min.js';
 script.type = 'text/javascript';
 document.getElementsByTagName('head')[0].appendChild(script);
 
+function returnToLogin() {
+    window.location.pathname = "/";
+}
+
 function createUser() {
     var username = document.getElementById("userName").value;
     var password = document.getElementById("userPswd").value;
@@ -11,10 +15,20 @@ function createUser() {
     var program = document.getElementById("userProgram").value;
     var courses = document.getElementById("coursesTaken").value;
 
-    // GET function to a new backend method which creates account goes here
-    window.location.pathname = "/";
-
-    //IF ACCOUNT CREATION IS SUCCESSFUL, TOGGLE BACK TO LOGIN SCREEN
-
-    //IF UNSUCCESSFUL, OUTPUT WHICH ERROR IN DEMO
+    if (password != password2) {
+        document.getElementById("demo").innerHTML = "Passwords do not match."
     }
+
+    else {
+        // GET function to a new backend method which creates account goes here
+        $.get("/create-user", { user:username, pass:password, prog:program, crs:courses }, function(output){
+            if (output == "Success!"){
+                document.cookie = "username=" + username
+                window.location.pathname = "/chatbot";
+            }
+            else {
+                document.getElementById("demo").innerHTML = output;
+            }
+        });
+    }
+}

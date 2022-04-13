@@ -72,10 +72,20 @@ def get_program():
         proList.append(program + " Requirements:")
         proList.append("---------------")
         proList.append("Core Requirements:")
+
+        # This logic checks if each course has been completed and fills in the checkbox if so
+        courses_taken = currentUser.courses_taken
         proReqs = db.Req.from_mongo(program)
         cores = proReqs.core_reqs
         for course in cores:
-            proList.append(course)
+            course_code = ' '.join(course.split()[:2])
+            line = '['
+            if course_code in courses_taken:
+                line += 'X'
+            else:
+                line += ' '
+            line += '] ' + course
+            proList.append(line)
         # print(str(proList))
     return '\n'.join(proList)
 
@@ -102,26 +112,43 @@ def view_profile():
     profile_view += 'Username: ' + current_user.username + '\n'
     profile_view += 'Degree programs: '
     if current_user.degree_programs:
-        profile_view += ' '.join(current_user.degree_programs)
+        profile_view += ', '.join(current_user.degree_programs)
     else:
         profile_view += 'none'
     profile_view += '\nCourses taken: '
     if current_user.courses_taken:
-        profile_view += ' '.join(current_user.courses_taken)
+        profile_view += ', '.join(current_user.courses_taken)
     else:
         profile_view += 'none'
     profile_view += '\nPlanner: '
     if current_user.planner:
-        profile_view += ' '.join(current_user.planner)
+        profile_view += ', '.join(current_user.planner)
     else:
         profile_view += 'none'
 
     return profile_view
 
 
+@app.route('/view-schedule')
+def view_schedule():
+    username = request.args.get('user')
+    current_user = db.UserAccount.from_mongo(username)
+    schedule_view = 'Courses in planner: '
+    if current_user.planner:
+        schedule_view += ', '.join(current_user.planner)
+    else:
+        schedule_view += 'none'
+
+    return schedule_view
+
+
 @app.route("/validate-course")
 def validate_course():
     course = request.args.get('crs')
+    return internal_validate_course(course)
+
+
+def internal_validate_course(course):
     if len(course) != 7 or len(course.split()) != 2:
         return "False"
     subject_code, course_num = course.split()
@@ -132,7 +159,7 @@ def validate_course():
 
 
 @app.route('/course-taken')
-def add_course_taken():
+def course_taken():
     username = request.args.get('user')
     course = request.args.get('crs')
     operation = request.args.get('operation')
@@ -156,6 +183,31 @@ def add_course_taken():
     return message
 
 
+@app.route('/course-planner')
+def course_planner():
+    username = request.args.get('user')
+    course = request.args.get('crs')
+    operation = request.args.get('operation')
+
+    this_user = db.UserAccount.from_mongo(username)
+    message = ''
+    if operation == 'add':
+        if course not in this_user.planner:
+            this_user.planner.append(course)
+            this_user.planner = sorted(this_user.planner)
+            message = course + ' successfully added.'
+        else:
+            message = course + ' already listed in planner.'
+    elif operation == 'remove':
+        if course in this_user.planner:
+            this_user.planner.remove(course)
+            message = course + ' successfully removed.'
+        else:
+            message = course + ' not in planner.'
+    this_user.update_database()
+    return message
+
+
 @app.route('/course-description')
 def course_description():
     course = request.args.get('crs')
@@ -163,6 +215,49 @@ def course_description():
     this_course = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num}).next()
     this_course = db.Course.from_mongo(this_course)
     return this_course.description
+
+
+@app.route('/course-prereqs')
+def course_prereqs():
+    course = request.args.get('crs')
+    subject_code, course_num = course.split()
+    this_course = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num}).next()
+    this_course = db.Course.from_mongo(this_course)
+    prereqs = this_course.prereqs
+    if prereqs:
+        return ', '.join(prereqs)
+    else:
+        return 'none'
+
+
+@app.route('/create-user')
+def create_user():
+    username = request.args.get('user')
+    password = request.args.get('pass')
+    program = request.args.get('prog')
+    courses = request.args.get('crs')
+
+    matching_programs = list(db.Req.REQS.find({'prog_name': program}))
+    if not len(matching_programs):
+        return "Invalid program."
+    this_program = matching_programs[0]
+
+    this_courses = [i.strip() for i in courses.split(',')]
+    for course in this_courses:
+        if not internal_validate_course(course):
+            return "Invalid course(s)."
+
+    try:
+        this_user = db.UserAccount(username, password)
+    except KeyError:
+        return "Username already taken."
+    except ValueError:
+        return "Password does not meet requirements."
+
+    this_user.degree_programs = [program]
+    this_user.courses_taken = this_courses
+    this_user.update_database()
+    return "Success!"
 
 
 if __name__ == '__main__':
