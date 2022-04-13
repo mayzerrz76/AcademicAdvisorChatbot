@@ -53,6 +53,7 @@ h3 {
     margin-top: 2.5em;
 }
 #butLogin{
+
     margin-top:40px;
     font-weight:bold;
     font-size: 20px;
@@ -71,6 +72,28 @@ h3 {
      background-color: #C2530B;
      color: navy;
  }
+
+ #butLogout{
+    position: absolute;
+     margin-top:-70px;
+     margin-left:10px;
+     font-weight:bold;
+     font-size: 20px;
+     color: #C2530B;
+     background-color: navy;
+     /*height: 35px;*/
+     padding:15px;
+     border-radius: 10px;
+     box-shadow: rgba(0, 0, 0, 0.75) 3px 4px 5px;
+ }
+ #butLogout:hover {
+     background-color: white;
+     color: #C2530B;
+ }
+  #butLogout:active{
+      background-color: #C2530B;
+      color: navy;
+  }
 /*#nav_menu ul li a:active {
     background-color: gray;
 }
@@ -127,10 +150,9 @@ h3 {
         margin-top: 6em;
         background-color: navy;
         width: 50%;
-        height: 600px;
+        height: 700px;
         border-radius: 25px;
-        box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 12px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/
-                                                                  inset 0 6px 6px rgba(255,255,255,0.5); /*top internal highlight*/
+        box-shadow: rgba(0, 0, 0, 0.75) 10px 10px 12px, inset 0 -6px 6px rgba(0,0,0,0.5), /*bottom internal shadow*/                                                   inset 0 6px 6px rgba(255,255,255,0.5); /*top internal highlight*/
         background-image: -webkit-linear-gradient(45deg,navy  25%,  steelblue 50%,navy  75%);
         margin-bottom: 200px;
         min-width: 900px;
@@ -310,9 +332,7 @@ font-size: 28px;
     border-radius:7px;
 }
 
-#demo {
-    color: orange;
-}
+
 #buttonInput {
     padding: 3px;
     font-family: monospace;
@@ -363,6 +383,13 @@ font-size: 28px;
  #butCreateAccount:active{
      background-color: #C2530B;
      color: navy;
+ }
+
+ #demo{
+    color: #C2530B;
+    font-size: 24px;
+    font-weight: bold;
+    text-shadow: 1px 2px 2px black;
  }
 
 .userText {

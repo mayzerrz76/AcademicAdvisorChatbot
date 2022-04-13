@@ -429,6 +429,17 @@ function writeMainMenu() {
 }
 // ------------------------------------ NAVIGATION CONTROL END ------------------------
 
+// -------------------------- RETURN TO LOGIN PAGE FUNCTION -----------------------//
+function returnToLogin() {
+    botText = "Logging out...";
+    botSays(botText);
+    sleep(500);
+    menustate = State.LOGOUT;
+    document.cookie = "username=;expires=-1";
+    window.location.pathname = "/";
+}
+// -------------------------- RETURN TO LOGIN PAGE FUNCTION -----------------------//
+
 // ----------------------------- SCROLLING FUNCTIONALITY START -------------------------------------
 //Add a function to initialize the auto-scroll feature on page load
 window.onload = function() {
