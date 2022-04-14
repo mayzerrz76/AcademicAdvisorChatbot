@@ -58,9 +58,11 @@ LAST MINUTE BUG FIXES:
 - ~anything~ is a course FIXED 
 - empty string as a password  FIXED
 - add a course required FIXED
-- can't toggle back to login  
-- returning to the login page without logging out allows for reentry to the main page without login 
 
+-- main page bugs --
+- can't toggle back to login FIXED
+- printing random characters when exiting specific menus FIXED
+-
 
 
 
