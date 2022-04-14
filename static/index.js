@@ -318,7 +318,8 @@ function courseDescription() {
                     // valid course entry handler
                     else {
                         $.get('/course-description', {crs: course}, function(description) {
-                            botSays([course + ":", description]);
+                            botSays(course + ":");
+                            botSays(description.split('\n'));
                             botSays("Enter another course or type 0 to return to main menu");
                             DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                         });
