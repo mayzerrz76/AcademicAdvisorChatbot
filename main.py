@@ -145,7 +145,7 @@ def view_schedule():
 @app.route("/validate-course")
 def validate_course():
     course = request.args.get('crs')
-    return internal_validate_course(course)
+    return str(internal_validate_course(course))
 
 
 def internal_validate_course(course):
@@ -154,8 +154,8 @@ def internal_validate_course(course):
     subject_code, course_num = course.split()
     matching_courses = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num})
     if len(list(matching_courses)):
-        return "True"
-    return "False"
+        return True
+    return False
 
 
 @app.route('/course-taken')
