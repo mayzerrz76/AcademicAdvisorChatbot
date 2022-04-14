@@ -10,11 +10,13 @@ function sleep(ms) {
 }
 
 // Instantiate global variables and switch-variable State
-const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CHANGESCHED:11}
-var menustate = State.MAIN;
-
+const State = { MAIN:0, PREREQ:1, SCHED:2, DESC:3, PROF:4, LOGOUT:5, COURSE:6, CHANGEPROF:7, PROGREQ:8, CONTACT:9, CHANGESCHED:11, NULL:99}
+var menustate = State.NULL;
 
 var username = document.cookie.split('=')[1];
+if (username != '') {
+    menustate = State.MAIN;
+}
 
 var globalCourse;
 
