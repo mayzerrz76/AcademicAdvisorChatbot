@@ -245,8 +245,19 @@ def create_user():
     program = request.args.get('prog').strip()
     courses = request.args.get('crs').strip()
 
+    if username == '':
+        return "Username must not be empty."
+
+    try:
+        this_user = db.UserAccount(username, password)
+    except KeyError:
+        return "Username already taken."
+    except ValueError:
+        return "Password does not meet requirements."
+
     matching_programs = list(db.Req.REQS.find({'prog_name': program}))
     if not len(matching_programs):
+        db.UserAccount.USERS.delete_one({'username': username})
         return "Invalid program."
     this_program = matching_programs[0]
 
@@ -256,14 +267,8 @@ def create_user():
         this_courses = [i.strip() for i in courses.split(',')]
         for course in this_courses:
             if not internal_validate_course(course):
+                db.UserAccount.USERS.delete_one({'username': username})
                 return "Invalid course(s)."
-
-    try:
-        this_user = db.UserAccount(username, password)
-    except KeyError:
-        return "Username already taken."
-    except ValueError:
-        return "Password does not meet requirements."
 
     this_user.degree_programs = [program]
     this_user.courses_taken = this_courses

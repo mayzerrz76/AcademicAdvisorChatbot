@@ -19,6 +19,9 @@ class UserAccount:
             if len(list(identical_users)):
                 raise KeyError('A user with that username already exists')
 
+        if len(username) == 0:
+            raise ValueError('Username must not be empty')
+
         self.username = username
 
         # For validating password requirements - e.g. at least 8 characters, number, upper + lower case
