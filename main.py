@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
+
 # loads the login page
 @app.route("/")
 def home():
@@ -11,17 +12,20 @@ def home():
     # allow for interacting with chatbot page
     return render_template("login.html")
 
+
 # loads the new user page
 @app.route("/newUser")
 def new_user():
 
     return render_template("newuser.html")
 
+
 # loads the chatbot page
 @app.route("/chatbot")
 def landing_page():
 
     return render_template("index.html")
+
 
 # allows for editing a user schedule object
 @app.route("/schedule")
@@ -38,6 +42,7 @@ def build_schedule():
     elif action == "query":
         # mongo db stuff for getting information
         return str(course) + " date & time"
+
 
 # allows for retrieving course information
 @app.route("/course")
@@ -59,6 +64,7 @@ def get_course_info():
         return "valid course!"
     else:
         return "this shouldn't be accessible!"
+
 
 # allows for retrieving program requirements
 @app.route("/prog")
@@ -89,6 +95,7 @@ def get_program():
         # print(str(proList))
     return '\n'.join(proList)
 
+
 # appropriate login procedure
 @app.route("/login")
 def validate_login():
@@ -102,6 +109,7 @@ def validate_login():
         return username
     else:
         return ""
+
 
 @app.route("/view-profile")
 def view_profile():
