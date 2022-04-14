@@ -234,18 +234,21 @@ def course_prereqs():
 def create_user():
     username = request.args.get('user')
     password = request.args.get('pass')
-    program = request.args.get('prog')
-    courses = request.args.get('crs')
+    program = request.args.get('prog').strip()
+    courses = request.args.get('crs').strip()
 
     matching_programs = list(db.Req.REQS.find({'prog_name': program}))
     if not len(matching_programs):
         return "Invalid program."
     this_program = matching_programs[0]
 
-    this_courses = [i.strip() for i in courses.split(',')]
-    for course in this_courses:
-        if not internal_validate_course(course):
-            return "Invalid course(s)."
+    if courses == '':
+        this_courses = []
+    else:
+        this_courses = [i.strip() for i in courses.split(',')]
+        for course in this_courses:
+            if not internal_validate_course(course):
+                return "Invalid course(s)."
 
     try:
         this_user = db.UserAccount(username, password)
