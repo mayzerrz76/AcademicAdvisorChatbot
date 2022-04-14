@@ -220,9 +220,21 @@ def course_planner():
 def course_description():
     course = request.args.get('crs')
     subject_code, course_num = course.split()
-    this_course = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num}).next()
-    this_course = db.Course.from_mongo(this_course)
-    return this_course.description
+    message = ''
+
+    these_courses = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num})
+    these_courses = [db.Course.from_mongo(i) for i in these_courses]
+    message += these_courses[0].description + '\n'
+    message += 'The following section(s) of this course are being offered:\n'
+    for this_course in these_courses:
+        this_message = ''
+        this_message += this_course.section + '\t'
+        this_message += this_course.days + '\t'
+        this_message += this_course.time + '\t'
+        this_message += this_course.instructor + '\t'
+        this_message += this_course.location
+        message += this_message + '\n'
+    return message
 
 
 @app.route('/course-prereqs')
