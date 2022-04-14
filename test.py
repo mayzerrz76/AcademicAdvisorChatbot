@@ -17,7 +17,32 @@ Output: User prompted with "incorrect username or password" message
 Input: Repeated spamming of enter button
 Output: User prompted with "incorrect username or password" message
 
+Input: Correct username and password entry and enter button pressed
+Output: Navigates to the chatbot main page
+
+-- NEW ACCOUNT PROCEDURES -- 
+
 Input: 
+Output:
+
+Input:
+Output:
+
+Input:
+Output:
+
+Input:
+Output:
+
+Input:
+Output:
+
+Input:
+Output:
+
+Input:
+Output:
+
 
 
 
