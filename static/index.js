@@ -44,12 +44,9 @@ function controlFlow() {
         case "1":
             menustate = State.PROGREQ;
             getProgReq(username);
-            //menustate = State.MAIN;
             break;
         // handles the course prerequisite case
         case "2":
-//            botText = "view course pre reqs menu  'WORK TODO";
-//            botSays(botText);
             menustate = State.PREREQ;
             botSays(["Which course would you like to know the prerequisites of?","or type 0 to return to main menu"]);
             break;
@@ -83,7 +80,7 @@ function controlFlow() {
             break;
         // handles all other bad input
         default:
-            botText = "Please enter a number 0 through 6 to select a menu.";
+            botText = "Please enter a number 1 through 6 to select a menu, or press 0 to logout.";
             botSays(botText);
             writeMainMenu();
             break;
@@ -96,7 +93,7 @@ function controlFlow() {
 // waits for user input before returning to main menu
 function contactInfoControlFlow(){
     userInput = getUserText();
-    //userSays(userInput);
+    $("#textInput").val("");
     writeMainMenu();
     menustate = State.MAIN;
 }
@@ -123,7 +120,7 @@ async function printWait(howLong){
 // waits for user input before returning to main menu
 function progReqControlFlow(){
     userInput = getUserText();
-    //userSays(userInput);
+    $("#textInput").val("");
     writeMainMenu();
     menustate = State.MAIN;
 }

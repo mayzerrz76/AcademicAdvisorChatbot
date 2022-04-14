@@ -47,14 +47,19 @@ Output:
 
 -- MAIN PAGE TESTING -- 
 
+Input: Invalid text input (in any menu or submenu)
+Output: (in submenus) Prompts user with "I didn't quite get that --" message and repeats the menu option 
+        (in mainmenu) Prompts user with "Please enter a number 1 through 6 to select a menu, or press 0 to logout" message
+
 
 LAST MINUTE BUG FIXES:
 
 --  new user bugs -- 
-- ~anything~ is a course  
+- ~anything~ is a course FIXED 
 - empty string as a password  FIXED
 - add a course required FIXED
-- can't toggle back to login FIXED 
+- can't toggle back to login  
+- returning to the login page without logging out allows for reentry to the main page without login 
 
 
 
