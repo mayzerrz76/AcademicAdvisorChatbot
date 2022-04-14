@@ -34,25 +34,26 @@ Input: Invalid Program added
 Output: User prompted with "Invalid program" message
 
 Input: illegitimate courses added 
-Output: user prompted with 
+Output: User prompted with #######
 
-Input:
-Output:
+Input: password doesnt match length requirements 
+Output: User prompted with "Password does not meet requirements" 
 
-Input:
-Output:
+Input: clicking return to login screen with any/all information filled out correctly/incorrectly
+Output: User is returned to login screen and no new account is created or attempted to be created
 
-Input:
-Output:
+Input: create an account is clicked without any entries filled in 
+Output: 
 
 
 LAST MINUTE BUG FIXES:
 
 --  new user bugs -- 
-- ~anything~ is a course  FIXED
+- ~anything~ is a course  
 - empty string as a password  FIXED
 - add a course required FIXED
 - can't toggle back to login FIXED 
+
 
 
 
