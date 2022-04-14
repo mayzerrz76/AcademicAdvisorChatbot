@@ -45,6 +45,8 @@ Output: User is returned to login screen and no new account is created or attemp
 Input: create an account is clicked without any entries filled in 
 Output: 
 
+-- MAIN PAGE TESTING -- 
+
 
 LAST MINUTE BUG FIXES:
 

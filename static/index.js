@@ -78,7 +78,7 @@ function controlFlow() {
             break;
         case "6":
             botSays(["List of important contact info", "DPS (315)-443-2224", "SUICIDE HOTLINE (800)-273-8255", "SEXUAL ASSAULT HOTLINE (315)-443-8000", "SU COVID OFFICE (315)-443-6180", "BARNES CENTER (315)-443-8000", "FINANCIAL SUPPORT (315)-443-1513", "DISABILITY RESOURCES (315)-443-4498", "MOHAN (315)-443-2322", "INFORMATION TECHNOLOGY (315)-443-4498", "INTERNATIONAL SERVICES (315)-443-2457"]);
-            botSays("Enter input to return to main menu...");
+            botSays("Press Enter to Return to Main Menu.");
             menustate = State.CONTACT;
             break;
         // handles all other bad input
@@ -96,7 +96,7 @@ function controlFlow() {
 // waits for user input before returning to main menu
 function contactInfoControlFlow(){
     userInput = getUserText();
-    userSays(userInput);
+    //userSays(userInput);
     writeMainMenu();
     menustate = State.MAIN;
 }
@@ -110,7 +110,7 @@ async function getProgReq(user_name){
     $.get("/prog", {user:user_name}, function(aiText){
         aiText = aiText.split('\n');
         botSays(aiText);
-        botSays("Enter input to return to main menu...");
+        botSays("Press Enter to Return to Main Menu.");
         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
     });
 }
@@ -123,7 +123,7 @@ async function printWait(howLong){
 // waits for user input before returning to main menu
 function progReqControlFlow(){
     userInput = getUserText();
-    userSays(userInput);
+    //userSays(userInput);
     writeMainMenu();
     menustate = State.MAIN;
 }
