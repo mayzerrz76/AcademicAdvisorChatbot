@@ -22,8 +22,19 @@ Output: Navigates to the chatbot main page
 
 -- NEW ACCOUNT PROCEDURES -- 
 
-Input: 
-Output:
+(Besides the item listed, assume all other data is appropriate)
+
+Input: Name already in database 
+Output: User prompted with "Username already taken" message
+
+Input: Passwords Don't Match
+Output: User prompted with "Passwords do not match" message
+
+Input: Invalid Program added 
+Output: User prompted with "Invalid program" message
+
+Input: illegitimate courses added 
+Output: user prompted with 
 
 Input:
 Output:
@@ -34,15 +45,14 @@ Output:
 Input:
 Output:
 
-Input:
-Output:
 
-Input:
-Output:
+LAST MINUTE BUG FIXES:
 
-Input:
-Output:
-
+--  new user bugs -- 
+- ~anything~ is a course  FIXED
+- empty string as a password  FIXED
+- add a course required FIXED
+- can't toggle back to login FIXED 
 
 
 
