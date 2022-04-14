@@ -158,7 +158,7 @@ def validate_course():
 
 def internal_validate_course(course):
     if len(course) != 7 or len(course.split()) != 2:
-        return "False"
+        return False
     subject_code, course_num = course.split()
     matching_courses = db.Course.COURSES.find({'subject_code': subject_code, 'course_num': course_num})
     if len(list(matching_courses)):
