@@ -158,7 +158,7 @@ function editProfile(){
                     else {
                         menustate = State.CHANGEPROF;
                         globalCourse = course;
-                        botSays(["0) Choose a different course","1) Add course to schedule","2) Remove course from schedule"]);
+                        botSays(["0) Choose a different course","1) Add course to courses taken","2) Remove course from courses taken"]);
                         DivElmnt.scrollTop = DivElmnt.scrollHeight - DivElmnt.offsetHeight+100;
                     }
                 });

@@ -55,14 +55,14 @@ Output: (in submenus) Prompts user with "I didn't quite get that --" message and
 LAST MINUTE BUG FIXES:
 
 --  new user bugs -- 
-- ~anything~ is a course FIXED 
-- empty string as a password  FIXED
+- ~anything~ accepted as a course FIXED 
+- empty string as a password FIXED
 - add a course required FIXED
 
 -- main page bugs --
 - can't toggle back to login FIXED
 - printing random characters when exiting specific menus FIXED
--
+- outdated "schedule" dialogue in user profile submenu (see video) FIXED
 
 
 
