@@ -6,7 +6,9 @@ BUILD INSTRUCTIONS
 
 Configure python interpreter to Python 3.8 (although other interpreters seem to work in a jiffy)
 
-To gain access to the framework connecting the frontend javascript and backend python code, execute the terminal command: $ pip install Flask
+To gain access to the framework connecting the frontend javascript and backend python code, execute the following terminal commands:
+pip install Flask
+pip install pymongo[srv]
 
 In an IDE of your choice (we suggest PyCharm) run main.py and click the development server url which is printed to the python console. 
 
