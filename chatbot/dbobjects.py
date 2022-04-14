@@ -67,8 +67,8 @@ class UserAccount:
 
     @staticmethod
     def is_valid_password(password):
-        # TODO Add password requirement logic here
-        return True
+        # TODO Add more password requirement logic here
+        return len(password) >= 8
 
 
 class Course:
@@ -127,6 +127,7 @@ class ReqType(Enum):
     BASE = 1
     AND = 2
     OR = 3
+
 
 class Req:
     REQS = DATABASE['progReqs']
