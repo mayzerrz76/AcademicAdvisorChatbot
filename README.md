@@ -12,6 +12,9 @@ pip install pymongo[srv]
 
 In an IDE of your choice (we suggest PyCharm) run main.py and click the development server url which is printed to the python console. 
 
+**Upon Creating an account, entering either "Mathematics" or "Computer Science" as a program is required. 
+for a dummy user the username password combo "user guy" "12345678" can be used 
+
 Enjoy. 
 
 --- 
